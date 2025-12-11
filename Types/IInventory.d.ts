@@ -1,5 +1,5 @@
 interface Item {
-    uid: number, // create in config
+    uuid: string, // create in config
     equipped: boolean,
 }
 

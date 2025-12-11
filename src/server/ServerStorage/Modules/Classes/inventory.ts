@@ -4,8 +4,6 @@ import { HttpService } from "@rbxts/services";
 
 export class Inventory {
 
-    private configs = new Map(); // keep weapon configs (for get id)
-
     constructor( player: Player ) {
             
     }
@@ -24,18 +22,21 @@ export class Inventory {
 
     } // remote init
     
-    public createItem( player: Player, weaponType: string | number ) { // number for load data?
+    public createItem( player: Player, weaponType: string | number ) {
         const profile = getProfile(player);
         if ( profile === undefined ) {
             player.Kick(`Profile session end - Please rejoin`);
             return;
         }
 
-        const uuid = HttpService.GenerateGUID(false);
+        const uuid = HttpService.GenerateGUID(false) as string;
 
         const itemValue: Item = {
             equipped: false,
-            uid: 1, // get from configs
+            uuid: uuid, 
+
+            // weapon type weapon / armore
+            // weapon name for find config
         }
 
         profile.Data.inventory.weapons.set( uuid, itemValue )

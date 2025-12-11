@@ -30,9 +30,9 @@ world-of-magic
 
             [rework] :
                 [X] react companents
-                
-                - names, all name -> onStart, onAttack, getPosition [ get, on, use ]
+                [X] names, all name -> onStart, onAttack, getPosition [ get, on, use ]
 
+                SOON
                 - Weapon-Service [w. derpmonster83 paintball and phantom forces review]
                 - Base-Weapon-Class rework logic
                 
@@ -43,8 +43,10 @@ world-of-magic
 
             - Inventory
                 UI (client) :
-                    - rework
-
+                    - studio -> react UI
+                    - configure hooks
+                    - LISTS
+                    
 
 
 

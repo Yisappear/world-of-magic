@@ -1,38 +1,35 @@
-import React, { useState } from "@rbxts/react";
-import OpenMainFrameButton from "./Buttons/Open-MainFrame-Button";
-import CloseMainFrameButton from "./Buttons/Close-MainFrame-Button";
-import OpenWeaponListButton from "./Buttons/WeaponList-Button";
-import OpenArmoreListButton from "./Buttons/ArmoreList-Button";
-import WeaponListFrame from "./Frames/WeaponList-Frame";
+import React from "@rbxts/react";
+import { changeMainFrameVisbile } from "./hooks";
+import MainFrame from "./Frames/main-frame";
+import CloseButton from "./Buttons/close-button";
+import EquipBestButton from "./Buttons/equip-best-button";
+import TextFrame from "./Frames/text-frame";
+import CountFrame from "./Frames/count-frame";
+import SelectFrame from "./Frames/select-frame";
 
-interface Porps {
+// types
+type booleanStateHook = [boolean, VoidFunction];
+
+// hooks
+const [mVisible, changeMVisible] = changeMainFrameVisbile() as booleanStateHook;
+
+interface Props {
 
 }
 
-// main frame visible
-const [mainFrameVisible, changeMainFrameVisible] = useState(true);
-const mainFrameChangeVisible = () => changeMainFrameVisible((v) => !v);
+export default function App(props: Props): React.Element {
+    return (
+        <screengui ResetOnSpawn={ false }>
+            <MainFrame visible={ mVisible } >
 
+                <CloseButton onClick={ changeMVisible } />
+                <EquipBestButton onClick={ changeMVisible } />
 
-export default function MainFrame(props: Porps): React.Element {
-	return (
-		<screengui ResetOnSpawn={ false } >
-			<frame
-				Size={ UDim2.fromScale(0.6, 0.6) }
-				Position={ UDim2.fromScale(0.2, 0.2) }
-				BackgroundColor3={ Color3.fromRGB(35, 35, 35) }
-				Visible={ mainFrameVisible }
-			>
-				<uicorner CornerRadius={ new UDim(0, 25) } />
+                <TextFrame/>
+                <CountFrame/>
+                <SelectFrame voidSelect={ true } itemSelect={ false } />
 
-				<CloseMainFrameButton onClick={ mainFrameChangeVisible } />
-				<OpenWeaponListButton />
-				<OpenArmoreListButton />
-
-				<WeaponListFrame />
-			</frame>
-			
-			<OpenMainFrameButton onClick={ mainFrameChangeVisible } />
-		</screengui>
-	);
+            </MainFrame>
+        </screengui>
+    )
 }
