@@ -106,7 +106,6 @@ Players.PlayerAdded.Connect(player => {
     print(`give weapon for : ${player.DisplayName}`);
     giveWeapon(player, GameConfig.BASE_WEAPON);
 })
-
 GameConfig.attackEvent.OnServerEvent.Connect((player: Player, args) => {
     if ( player === undefined || args === undefined ) return;
 

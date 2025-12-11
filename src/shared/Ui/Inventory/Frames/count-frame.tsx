@@ -35,7 +35,7 @@ export default function CountFrame(props: Props): React.Element {
                 BackgroundTransparency={ 1 }
                 Visible={ true }
                 Text={ `0/10` }
-                Font={ "Highway" }
+                Font={ "FredokaOne" }
                 TextScaled={ true }
                 TextColor3={ Color3.fromRGB(255, 255, 255) }
             >
@@ -49,7 +49,7 @@ export default function CountFrame(props: Props): React.Element {
                 BackgroundTransparency={ 1 }
                 Visible={ true }
                 Text={ `0/10` }
-                Font={ "Highway" }
+                Font={ "FredokaOne" }
                 TextScaled={ true }
                 TextColor3={ Color3.fromRGB(255, 255, 255) }
             >

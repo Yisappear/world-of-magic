@@ -1,22 +1,22 @@
 -- Compiled with roblox-ts v3.0.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-local GameConfig = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Configs", "Game-Config").default
+local GameConfig = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Configs", "GameConfig").default
 -- private functions
-local function unequipAnimationPlay()
+local function useUnequipAnimation()
 	return nil
 end
-local function equipAnimationPlay()
+local function useEquipAnimation()
 	return nil
 end
-local function newWeapon(tool)
+local function loadWeapon(tool)
 	if tool == nil then
 		return nil
 	end
 	tool.Equipped:Connect(function()
-		equipAnimationPlay()
+		useEquipAnimation()
 	end)
 	tool.Unequipped:Connect(function()
-		unequipAnimationPlay()
+		useUnequipAnimation()
 	end)
 	tool.Activated:Connect(function()
 		GameConfig.attackEvent:FireServer(tool)
@@ -31,6 +31,6 @@ GameConfig.newWeaponEvent.OnClientEvent:Connect(function(args)
 	if tool:IsA("Tool") == false then
 		return nil
 	end
-	newWeapon(tool)
+	loadWeapon(tool)
 end)
 return nil

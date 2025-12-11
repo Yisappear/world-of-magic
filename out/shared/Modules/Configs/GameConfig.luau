@@ -44,7 +44,7 @@ local default = {
 	PROFILE_TEMPLATE = {
 		Cash = 1000,
 		inventory = {
-			items = {},
+			weapons = {},
 		},
 	},
 	BASE_WEAPON = "BaseWeapon",

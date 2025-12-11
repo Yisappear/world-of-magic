@@ -8,9 +8,15 @@
 		"$className": "DataModel",
 		"ServerScriptService": {
 			"$className": "ServerScriptService",
-			"$path": "out/server"
+			"$path": "out/server/ServerScriptService"
 			
 		},
+
+		"ServerStorage":{
+			"$className": "ServerStorage",
+			"$path": "out/server/ServerStorage"
+		},	
+
 		"ReplicatedStorage": {
 			"$className": "ReplicatedStorage",
 			"rbxts_include": {
@@ -32,8 +38,11 @@
 			"$className": "StarterPlayer",
 			"StarterPlayerScripts": {
 				"$className": "StarterPlayerScripts",
-				"$path": "out/client"
-				
+				"$path": "out/client/StarterPlayerScripts"	
+			},
+			"StarterCharacterScripts": {
+				"$className": "StarterCharacterScripts",
+				"$path": "out/client/StarterCharacterScripts"
 			}
 		}
 	}

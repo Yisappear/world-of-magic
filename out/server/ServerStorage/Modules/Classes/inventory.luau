@@ -15,12 +15,11 @@ do
 		return self:constructor(...) or self
 	end
 	function Inventory:constructor(player)
-		self.configs = {}
 	end
-	function Inventory:setup(player)
+	function Inventory:onStart(player)
 		-- networking | notification
 	end
-	function Inventory:newItem(player, weaponType)
+	function Inventory:createItem(player, weaponType)
 		local profile = getProfile(player)
 		if profile == nil then
 			player:Kick(`Profile session end - Please rejoin`)
@@ -29,27 +28,20 @@ do
 		local uuid = HttpService:GenerateGUID(false)
 		local itemValue = {
 			equipped = false,
-			uid = 1,
+			uuid = uuid,
 		}
-		profile.Data.inventory.items[uuid] = itemValue
+		profile.Data.inventory.weapons[uuid] = itemValue
 		-- notification / or fire ( update UI in client )
 	end
-	function Inventory:deletItem(player, uuid)
+	function Inventory:deleteItem(player, uuid)
 		local profile = getProfile(player)
 		if profile == nil then
 			player:Kick(`Profile session end - Please rejoin`)
 			return nil
 		end
-		local _items = profile.Data.inventory.items
+		local _weapons = profile.Data.inventory.weapons
 		local _uuid = uuid
-		_items[_uuid] = nil
-	end
-	function Inventory:updateInventory(player)
-		local profile = getProfile(player)
-		if profile == nil then
-			player:Kick(`Profile session end - Please rejoin`)
-			return nil
-		end
+		_weapons[_uuid] = nil
 	end
 	function Inventory:getEquippedItems(player)
 		local profile = getProfile(player)
@@ -58,7 +50,7 @@ do
 			return nil
 		end
 		local allItems = {}
-		local inventory = profile.Data.inventory.items
+		local inventory = profile.Data.inventory.weapons
 		-- forEach + push / or forEach + props.equipped === true + push
 		local equippedItems = {}
 		-- for + push
@@ -70,9 +62,9 @@ do
 			player:Kick(`Profile session end - Please rejoin`)
 			return nil
 		end
-		local _items = profile.Data.inventory.items
+		local _weapons = profile.Data.inventory.weapons
 		local _uuid = uuid
-		local item = _items[_uuid]
+		local item = _weapons[_uuid]
 		if item == nil then
 			return nil
 		end
@@ -86,9 +78,9 @@ do
 			player:Kick(`Profile session end - Please rejoin`)
 			return nil
 		end
-		local _items = profile.Data.inventory.items
+		local _weapons = profile.Data.inventory.weapons
 		local _uuid = uuid
-		local item = _items[_uuid]
+		local item = _weapons[_uuid]
 		if item == nil then
 			return nil
 		end

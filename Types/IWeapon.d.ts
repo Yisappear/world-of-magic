@@ -5,5 +5,5 @@ interface Weapon {
     cooldown: number,
     damage: number,
     range: number,
-    attack: (this: Weapon, player: Player) => [Player, Model] | [Player, undefined],
+    attack(this: Weapon, player: Player): [Player, Model] | [Player, undefined],
 }

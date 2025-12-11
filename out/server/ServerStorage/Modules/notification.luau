@@ -1,7 +1,7 @@
 -- Compiled with roblox-ts v3.0.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local getProfile = TS.import(script, game:GetService("ServerStorage"), "Modules", "Player").default
-local function updateLeaderstats(player)
+local function setLeaderstatValues(player)
 	local profile = getProfile(player)
 	if profile == nil then
 		player:Kick(`Profile session end - Please rejoin`)
@@ -16,6 +16,6 @@ local function updateLeaderstats(player)
 end
 local inventoryNotification = {}
 return {
-	updateLeaderstats = updateLeaderstats,
+	setLeaderstatValues = setLeaderstatValues,
 	inventoryNotification = inventoryNotification,
 }

@@ -13,77 +13,75 @@
 	        - Monetization
 	
 	
-<<<<<<< HEAD
-	    TODO :
-	        - 
-=======
 	        - flex inf 
 	            - HttpService.GenerateGUID(false) -> unique id
+	
+	            - react Hooks :
+	                - useRef -> link on Instanse or bind Instanse on Ref variable
+	                - useEffect -> work once when mount for bind exapmle
+	
+	
+	
+	
+	/ / /   todo   / / /
 	    TODO:
-	        - fix:
-	            - give tool again while player die ()
+	        fix:
+	            [bug] : 
+	                - Weapon-Service .attack -> :attack()
+	                - screengui reset per respawn
 	
-	        - new:
-	            - Inventory / CLASS
-	                - UI
-	                    - button open invenotory move to hotbar
-	                        - create functions for change state
+	            [rework] :
+	                [X] react companents
+	                [X] names, all name -> onStart, onAttack, getPosition [ get, on, use ]
+	
+	                SOON
+	                - Weapon-Service [w. derpmonster83 paintball and phantom forces review]
+	                - Base-Weapon-Class rework logic
+	                
+	                
+	        new:
+	            - React structure 
+	                - hooks.ts -> all hooks
+	
+	            - Inventory
+	                UI (client) :
+	                    - studio -> react UI
+	                    - configure hooks
+	                    - LISTS
+	                    
 	
 	
 	
-	                        
-	    Hooks :
-	
-		useRef -> link on Instanse or bind Instanse on Ref variable
-		useEffect -> work once when mount 
 	
 	
 	
->>>>>>> b3d315b (new: react UI: Inventory frame)
 	
 	
 	
-	    Create :
-	        - ReplicatedStorage
-	            - Events
-	                - NotificationEvents / Folder
-	                - InventoryEvents / Folder
-	                    - 
-	                - WeaponEvents / Folder
-	                    - NewWeapon / RemoteEvent
-	                    - Attack / RemoteEvent
-	                - MouseEvents / Folder
-	                    - GetMousePositionOnScreenEvent / RemoteFunction
-	                    - GetMouseHitInWolrdEvent / RemoteFunction
-	                    - GetMousePositionInWorldEvent / RemoteFunction
 	
-	            - Assets / folder
-	                - Weapons / folder
-	                    - BaseWeapon / tool
-	                    - BaseBullet / BasePart
 	
-<<<<<<< HEAD
-	    ROJO :
-=======
-	        - ServerStorage
-	            - Events / folder
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 	
 	    ROJO:
->>>>>>> b3d315b (new: react UI: Inventory frame)
 	        - ignore
 	            init.meta.json
 	                {
 	                    "ignoreUnknownInstances": true
 	                }
-	
-	
-	    BUGS
-	        - WeaponHandler
-	            - attack function, .attack => :attack
-	    
 	
 ]]
 return nil

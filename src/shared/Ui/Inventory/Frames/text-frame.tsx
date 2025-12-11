@@ -10,7 +10,7 @@ export default function TextFrame(props: Props): React.Element {
             Size={ UDim2.fromScale(0.5, 0.2) }
             Position={ UDim2.fromScale(-0.1, -0.05) }
             BackgroundColor3={ Color3.fromRGB(255, 255, 255) }
-            BackgroundTransparency={ 0 }
+            BackgroundTransparency={ 1 }
             Visible={ true }
         >
 

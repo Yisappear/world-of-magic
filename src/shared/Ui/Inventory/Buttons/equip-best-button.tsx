@@ -21,7 +21,7 @@ export default function EquipBestButton(props: Props): React.Element {
                 BackgroundTransparency={ 1 }
                 Visible={ true }
                 Text={ "Equip Best" }
-                Font={ "Highway" }
+                Font={ "FredokaOne" }
                 TextColor3={ Color3.fromRGB(255, 255, 255) }
                 TextScaled={ true }
             >

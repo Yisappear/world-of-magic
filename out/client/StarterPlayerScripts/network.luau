@@ -1,11 +1,11 @@
 -- Compiled with roblox-ts v3.0.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-local GameConfig = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Configs", "Game-Config").default
-local _mouse = TS.import(script, script.Parent, "Modules", "Utils", "mouse")
-local getMousePositionOnScreen = _mouse.getMousePositionOnScreen
-local getMousePositionInWorld = _mouse.getMousePositionInWorld
-local getMouseHitInWolrd = _mouse.getMouseHitInWolrd
-local getCameraRay = _mouse.getCameraRay
+local GameConfig = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Configs", "GameConfig").default
+local _Mouse = TS.import(script, script.Parent, "Modules", "Utils", "Mouse")
+local getMousePositionOnScreen = _Mouse.getMousePositionOnScreen
+local getMousePositionInWorld = _Mouse.getMousePositionInWorld
+local getMouseHitInWolrd = _Mouse.getMouseHitInWolrd
+local getCameraRay = _Mouse.getCameraRay
 -- setup
 -- mouse
 GameConfig.getMousePositionOnScreenEvent.OnClientInvoke = function()

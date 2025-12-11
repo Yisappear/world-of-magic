@@ -23,7 +23,7 @@ export default function CloseButton(props: Props): React.Element {
                 BackgroundTransparency={ 1 }
                 Visible={ true }
                 Text={ "Close" }
-                Font={ "Highway" }
+                Font={ "FredokaOne" }
                 TextScaled={ true }
                 TextColor3={ Color3.fromRGB(0, 0, 0) }
             >

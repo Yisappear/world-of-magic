@@ -1,7 +1,9 @@
 import React from "@rbxts/react";
 
 interface Props {
-    visible: boolean
+    visible: boolean,
+
+    [key: string]: any,
 }
 
 export default function MainFrame(props: Props): React.Element {
@@ -14,6 +16,8 @@ export default function MainFrame(props: Props): React.Element {
         >
             <uicorner CornerRadius={ new UDim(0, 25) } />
             <uistroke Thickness={ 2 } />
+
+            {props["children"]}
         </frame>
     )
 }
