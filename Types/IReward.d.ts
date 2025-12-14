@@ -1,4 +1,0 @@
-interface KillReward {
-    cash: number, 
-    
-}

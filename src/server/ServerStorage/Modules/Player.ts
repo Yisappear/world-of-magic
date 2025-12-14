@@ -47,6 +47,7 @@ function useLoader(player: Player) {
 
 // 1
 function onPlayerAdded(player: Player): void {
+    // start session?
     const key = `User_` + player.UserId;
     const profile = PlayerStore.StartSessionAsync(key, {
         Cancel: (() => {
