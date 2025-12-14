@@ -12,43 +12,48 @@
 	        - Level system
 	        - Monetization
 	
-	
-	        - flex inf 
-	            - HttpService.GenerateGUID(false) -> unique id
-	
-	            - react Hooks :
-	                - useRef -> link on Instanse or bind Instanse on Ref variable
-	                - useEffect -> work once when mount for bind exapmle
-	
-	
-	
-	
 	/ / /   todo   / / /
 	    TODO:
 	        fix:
 	            [bug] : 
-	                - Weapon-Service .attack -> :attack()
-	                - screengui reset per respawn
+	                [X] Weapon-Service .attack -> :attack()
+	                [X] screengui reset per respawn
 	
 	            [rework] :
 	                [X] react companents
 	                [X] names, all name -> onStart, onAttack, getPosition [ get, on, use ]
 	
-	                SOON
-	                - Weapon-Service [w. derpmonster83 paintball and phantom forces review]
-	                - Base-Weapon-Class rework logic
-	                
-	                
-	        new:
-	            - React structure 
-	                - hooks.ts -> all hooks
+	                - Weapon-Service
+	                    - server side
+	                        - render movement -> BulkMoveTo
+	                    - client side
+	                        - Projictails
+	                            - Tween?
 	
-	            - Inventory
-	                UI (client) :
-	                    - studio -> react UI
-	                    - configure hooks
-	                    - LISTS
+	                    - RN watching [derpmonster83, qweekertom]
+	
+	                - Base-Weapon-Class rework logic
+	                    - oop -> function??
+	                
+	            
 	                    
+	
+	
+	
+	
+	
+	
+	        new:
+	            - Inventory
+	                UI :
+	                    [X] item list
+	                    - animations (tween + projictails)
+	                Network :
+	                    - connect server side 
+	                Notification :
+	                    - add new item
+	
+	
 	
 	
 	

@@ -1,10 +1,9 @@
 import { Players, RunService } from "@rbxts/services";
-import GameConfig from "shared/Modules/Configs/GameConfig";
 import ProfileStore from "@rbxts/profile-store";
 
 // constants
-const PlayerStore = ProfileStore.New(GameConfig.DATA_NAME, GameConfig.PROFILE_TEMPLATE);
-const Profiles = new Map<number, ProfileStore.Profile<typeof GameConfig.PROFILE_TEMPLATE>>();
+const PlayerStore = ProfileStore.New("unknown", {});
+const Profiles = new Map<number, ProfileStore.Profile<{}>>();
 
 // private functions
 
@@ -17,28 +16,10 @@ function loadProfile(player: Player): void {
         return;
     }
 
-    const data = profile.Data;
-
-    const leaderstats = player.FindFirstChild("leaderstats") as Folder;
-    const cash = leaderstats.FindFirstChild("Cash") as NumberValue;
-
-    // setup
-    cash.Value = data.Cash;
 }
 
 // 2
 function useLoader(player: Player) {
-
-    // leaderstat
-    const leaderstats = new Instance("Folder");
-    leaderstats.Name = "leaderstats";
-
-    const Cash = new Instance("NumberValue");
-    Cash.Name = "Cash";
-    Cash.Value = 0;
-
-    leaderstats.Parent = player;
-    Cash.Parent = leaderstats;
 
     task.wait(1); // for init all 
 
@@ -78,7 +59,7 @@ function onPlayerAdded(player: Player): void {
 }
 
 // export functions
-export default function getProfile(player: Player): ProfileStore.Profile<typeof GameConfig.PROFILE_TEMPLATE> | undefined {
+export default function getProfile(player: Player): ProfileStore.Profile< {} > | undefined {
     return Profiles.get(player.UserId);
 }
 
