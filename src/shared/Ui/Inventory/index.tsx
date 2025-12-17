@@ -10,7 +10,7 @@ interface Props {
 
 }
 
-export function App(props: Props): React.Element {
+export default function App(props: Props): React.Element {
     // hooks
     // main frame
     const [mainFrameVisible, mainFrame] = React.useState(true);

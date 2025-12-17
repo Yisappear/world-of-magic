@@ -6,7 +6,11 @@ if ( RunService.IsServer() === true ) {
 
         DATA_NAME: "unknown",
         DATA_TEMPLATE: {
-            cash: 1000
+            cash: 1000,
+            
+            inventory: {
+
+            },
         }
 
     }
@@ -22,8 +26,11 @@ export default {
     isClient: RunService.IsClient(),
 
 
+    // Weapons
+        WEAPON_ATTRIBUTE: "WEAPON_ATTRIBUTE",
+        FIRE_STAFF: "FIRE_STAFF",
 
-
-
+    // Armore
+        ARMORE_ATTRIBUTE: "ARMORE_ATTRIBUTE",
 
 }

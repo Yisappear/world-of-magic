@@ -8,7 +8,6 @@ const Profiles = new Map<number, ProfileStore.Profile<{}>>();
 // private functions
 
 // profile-store
-// 3
 function loadProfile(player: Player): void {
     const profile = Profiles.get(player.UserId);
     if ( profile === undefined ) {
@@ -18,7 +17,6 @@ function loadProfile(player: Player): void {
 
 }
 
-// 2
 function useLoader(player: Player) {
 
     task.wait(1); // for init all 
@@ -26,7 +24,6 @@ function useLoader(player: Player) {
     loadProfile(player);
 }
 
-// 1
 function onPlayerAdded(player: Player): void {
     // start session?
     const key = `User_` + player.UserId;
