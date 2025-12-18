@@ -2,60 +2,55 @@
 --[[
 	
 	world-of-magic
-	    GAME:
-	        - Magic weapons (Base, Fire, Ice, and more) : { attack, abilityZ, abilityX }
-	        - Data saving { ProfileStore } 
-	        - Reward system
-	        - Inventory
-	        - Store
-	        - Armore system
-	        - Level system
-	        - Monetization
 	
 	/ / /   todo   / / /
 	    TODO:
-	        fix:
-	            [bug] : 
-	                [X] Weapon-Service .attack -> :attack()
-	                [X] screengui reset per respawn
-	
-	            [rework] :
-	                [X] react companents
-	                [X] names, all name -> onStart, onAttack, getPosition [ get, on, use ]
-	
-	                - Weapon-Service
-	                    - server side
-	                        - render movement -> BulkMoveTo
-	                    - client side
-	                        - Projictails
-	                            - Tween?
-	
-	                    - RN watching [derpmonster83, qweekertom]
-	
-	                - Base-Weapon-Class rework logic
-	                    - oop -> function??
-	                
-	            
-	                    
+	       fix:
+	            inventory UI:
+	                - close button -> text position
 	
 	
+	
+	
+	
+	    todo:
+	        [X] weapon system
+	        [X] firestaff config
+	
+	        [X] inventory UI create/delete imagebutton in inventory list
 	
 	
 	
 	
 	        new:
-	            - Inventory
-	                UI :
-	                    [X] item list
-	                    - animations (tween + projictails)
-	                Network :
-	                    - connect server side 
-	                Notification :
-	                    - add new item
-	
-	
-	
-	
+	            - INVENOTORY server | Equip, Unequip, Sell, MoveTo Equipped
+	            - Projectile client Fireball
+	            - Weapon render when equip
+	            - Reward service + Boosts
+	            - Store
+	            - Monitization + UI / gamepass + devproduct
+	            - Ability firestaff [z, x]
+	            - Weapon system add / way to hitbox (explosion)
+	            - Npc for farm (npc can attack) ??
+	            - Kill feed UI
+	            - Potions, Health and Invisibility
+	            - Armore, has buff
+	            - PlayerStting in Player module, set WalkSpeed, 
+	            - Anti spawnkill
+	            - Hotbar UI / roblox-avatar, potion slot, Equipped items, health-line, 
+	            - Mana for abilitys
+	            - Admin abuse / drop gifts
+	            - Code system
+	            - Mini map
+	            - Every day / wheel system
+	            - New staff
+	            - Round system / mvp player + end Round screen
+	            - Admin panel / admin commands
+	            - Level system / reward for level
+	            - Morph system / character buff // RACE ( Human, Angel, Demon )
+	            - Morph ability
+	            - Load screen
+	            - Leaderboard
 	
 	
 	

@@ -55,10 +55,10 @@ function cleanup(model: BasePart): void {
     }
 }
 
-function getServerProjectile(staffBullet: BasePart): BasePart {
+function getServerProjectile(projectile: BasePart): BasePart {
     const part = new Instance("Part");
     part.Parent = Workspace;
-    part.Size = staffBullet.Size;
+    part.Size = projectile.Size;
     part.CanCollide = false;
 
     return part;

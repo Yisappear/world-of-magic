@@ -1,5 +1,13 @@
-import { ContextActionService } from "@rbxts/services";
+import { ContextActionService, RunService } from "@rbxts/services";
 import Network from "shared/Modules/Network";
+
+
+
+function renderWeapon() {}
+
+
+
+
 
 function onEquip(name: string): void {
 
@@ -15,5 +23,3 @@ function onUnequip(): void {
     // unbind CAS
     ContextActionService.UnbindAction("Attack");
 }
-
-

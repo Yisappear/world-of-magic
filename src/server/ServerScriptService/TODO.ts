@@ -4,15 +4,52 @@ world-of-magic
 / / /   todo   / / /
     TODO:
        fix:
+            inventory UI:
+                - close button -> text position
+                - equip, sell -> font or color
+                - equip, sell -> visible
+
+
+
+
+
+    todo:
+        [X] weapon system
+        [X] firestaff config
+        [X] inventory UI create/delete imagebutton in inventory list
 
 
 
 
         new:
-            - weapon system
-            - firestaff config
-
-
+            - INVENOTORY server | Equip, Unequip, Sell, MoveTo Equipped
+            - Projectile client Fireball
+            - Weapon render when equip
+            - Reward service + Boosts
+            - Store
+            - Monitization + UI / gamepass + devproduct
+            - Ability firestaff [z, x]
+            - Weapon system add / way to hitbox (explosion)
+            - Npc for farm (npc can attack) ??
+            - Kill feed UI
+            - Potions, Health and Invisibility
+            - Armore, has buff
+            - PlayerStting in Player module, set WalkSpeed, 
+            - Anti spawnkill
+            - Hotbar UI / roblox-avatar, potion slot, Equipped items, health-line, 
+            - Mana for abilitys
+            - Admin abuse / drop gifts
+            - Code system
+            - Mini map
+            - Every day / wheel system
+            - New staff
+            - Round system / mvp player + end Round screen
+            - Admin panel / admin commands
+            - Level system / reward for level
+            - Morph system / character buff // RACE ( Human, Angel, Demon )
+            - Morph ability
+            - Load screen
+            - Leaderboard
 
 
 

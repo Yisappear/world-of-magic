@@ -16,6 +16,16 @@ export default function App(props: Props): React.Element {
     const [mainFrameVisible, mainFrame] = React.useState(true);
     const changeMainFrameVisible = () => mainFrame((v) => !v);
 
+    // void select frame
+    const [voidSelectFrameVisible, voidSelect] = React.useState(true);
+    const changeVoidSelectVisible = () => voidSelect((v) => !v);
+
+    // select frame
+    const [selectFrameVisible, selectFrame] = React.useState(true);
+    const changeSelectVisible = () => selectFrame((v) => !v);
+
+    
+
     return (
         <screengui ResetOnSpawn={ false } >
             <MainFrame visible={ mainFrameVisible } >
@@ -23,11 +33,13 @@ export default function App(props: Props): React.Element {
                 <TextInventory />
                 <CloseButton onClick={ changeMainFrameVisible } />
 
-                <ContentFrame />
+                <ContentFrame 
+                    onClick1={ changeVoidSelectVisible }
+                    onClick2={ changeSelectVisible }
+                />
 
-                <VoidSelectFrame visible={ true } />
-                <WeaponSelectFrame visible={ false } />
-
+                <VoidSelectFrame visible={ voidSelectFrameVisible } />
+                <WeaponSelectFrame visible={ selectFrameVisible } />
 
             </MainFrame>
         </screengui>

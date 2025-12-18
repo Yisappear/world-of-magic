@@ -1,9 +1,11 @@
-import { Players, RunService } from "@rbxts/services";
+import { Players, RunService, HttpService } from "@rbxts/services";
 import ProfileStore from "@rbxts/profile-store";
+import GameConfig from "shared/Modules/Configs/GameConfig";
+import Network from "shared/Modules/Network";
 
 // constants
-const PlayerStore = ProfileStore.New("unknown", {});
-const Profiles = new Map<number, ProfileStore.Profile<{}>>();
+const PlayerStore = ProfileStore.New(GameConfig.DATA_NAME, GameConfig.DATA_TEMPLATE);
+const Profiles = new Map<number, ProfileStore.Profile<typeof GameConfig.DATA_TEMPLATE>>();
 
 // private functions
 
@@ -15,9 +17,44 @@ function loadProfile(player: Player): void {
         return;
     }
 
+    // leaderstats
+        const leaderstats = player.FindFirstChild("leaderstats") as Folder;
+        const cash = leaderstats.FindFirstChild("Cash") as NumberValue;
+        cash.Value = profile.Data.cash;
+
+
+
+        const weaponData: AddItemData = {
+            itemType: "Weapon",
+            itemIcon: "",
+            itemUUID: HttpService.GenerateGUID(false),
+        }
+        Network.AddItemEvent.FireClient(player, weaponData)
+        const armoreData: AddItemData = {
+            itemType: "Armore",
+            itemIcon: "",
+            itemUUID: HttpService.GenerateGUID(false),
+        }
+        Network.AddItemEvent.FireClient(player, armoreData)
+
+
+
+
 }
 
 function useLoader(player: Player) {
+
+    // leaderstats
+    const leaderstats = new Instance("Folder");
+    leaderstats.Name = "leaderstats";
+
+    const Cash = new Instance("NumberValue");
+    Cash.Name = "Cash";
+    Cash.Value = 0;
+
+    leaderstats.Parent = player;
+    Cash.Parent = leaderstats;
+
 
     task.wait(1); // for init all 
 
@@ -56,7 +93,7 @@ function onPlayerAdded(player: Player): void {
 }
 
 // export functions
-export default function getProfile(player: Player): ProfileStore.Profile< {} > | undefined {
+export default function getProfile(player: Player): ProfileStore.Profile< typeof GameConfig.DATA_TEMPLATE > | undefined {
     return Profiles.get(player.UserId);
 }
 

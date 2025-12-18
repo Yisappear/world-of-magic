@@ -9,7 +9,8 @@ if ( RunService.IsServer() === true ) {
             cash: 1000,
             
             inventory: {
-
+                weapons: {},
+                armores: {},
             },
         }
 
@@ -24,6 +25,18 @@ export default {
     isServer: RunService.IsServer(),
     isStudio: RunService.IsStudio(),
     isClient: RunService.IsClient(),
+
+    // DataService
+        DATA_NAME: "unknown",
+        DATA_TEMPLATE: {
+            cash: 1000,
+            
+            inventory: {
+                weapons: [],
+                armores: [],
+            },
+        },
+
 
 
     // Weapons

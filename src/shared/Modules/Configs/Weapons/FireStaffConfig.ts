@@ -46,7 +46,7 @@ export default {
         let lookAt!: Vector3;
 
         const downOffset = new Vector3(0, -0.3, 0);
-        if ( t >= 3 ) {
+        if ( t >= 2 ) {
             newVector = newVector.add(downOffset);
             lookAt = direction.add(downOffset);
         }

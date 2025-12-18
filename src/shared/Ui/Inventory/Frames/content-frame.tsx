@@ -3,7 +3,8 @@ import EquippedFrame from "./equipped-frame";
 import InventoryFrame from "./inventory-frame";
 
 interface Props {
-
+    onClick1: VoidFunction,
+    onClick2: VoidFunction,
 }
 
 export default function ContentFrame(props: Props): React.Element {
@@ -27,8 +28,14 @@ export default function ContentFrame(props: Props): React.Element {
                 <uilistlayout />
                 <uipadding />
 
-                <EquippedFrame />
-                <InventoryFrame />
+                <EquippedFrame 
+                    onClick1={ props.onClick1 }
+                    onClick2={ props.onClick2 }
+                />
+                <InventoryFrame 
+                    onClick1={ props.onClick1 }
+                    onClick2={ props.onClick2 }
+                />
                 
 
             </scrollingframe>
