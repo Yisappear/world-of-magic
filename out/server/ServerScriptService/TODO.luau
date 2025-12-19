@@ -7,8 +7,15 @@
 	    TODO:
 	       fix:
 	            inventory UI:
-	                - close button -> text position
+	                - close button text -> text position
+	                - equip, sell -> font or color
+	                - equip, sell -> visible
+	            
+	            weapon client:
+	                - double click
 	
+	            weapon server:
+	                - move down why?????????????
 	
 	
 	
@@ -16,8 +23,10 @@
 	    todo:
 	        [X] weapon system
 	        [X] firestaff config
-	
 	        [X] inventory UI create/delete imagebutton in inventory list
+	
+	
+	        - weapon system add cooldown
 	
 	
 	

@@ -6,6 +6,7 @@ local function renderWeapon()
 end
 local function onEquip(name)
 	local function onClick()
+		print(`onClick`)
 		Network.AttackEvent:FireServer()
 	end
 	-- bind CAS
@@ -15,4 +16,6 @@ local function onUnequip()
 	-- unbind CAS
 	ContextActionService:UnbindAction("Attack")
 end
+--TEST
+onEquip("")
 return nil

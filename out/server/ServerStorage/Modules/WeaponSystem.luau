@@ -60,15 +60,19 @@ local function getServerProjectile(projectile)
 	part.Parent = Workspace
 	part.Size = projectile.Size
 	part.CanCollide = false
+	part.Transparency = 0.5
 	return part
 end
 local function onAttack(player)
+	print("onAttack")
 	local _condition = player:GetAttribute(GameConfig.WEAPON_ATTRIBUTE)
 	if _condition == nil then
 		_condition = GameConfig.FIRE_STAFF
 	end
 	local weaponName = _condition
-	local config = require(WeaponConfigs:FindFirstChild(`{weaponName}` .. "Config"))
+	local configName = `{weaponName}` .. "Config"
+	local configModule = require(WeaponConfigs:FindFirstChild(configName))
+	local config = configModule.default
 	local model = getServerProjectile(config.projectileModel)
 	local cf = config.getStartPosition(player)
 	local startPosition = cf.Position
@@ -84,10 +88,12 @@ local function onAttack(player)
 		direction = direction,
 	}
 	table.insert(projectiles, _arg0)
+	model:SetAttribute(GameConfig.CAN_HIT, true)
 	model.Touched:Connect(function(otherPart)
-		if otherPart.Parent == playerCharacter then
+		if otherPart.Parent == playerCharacter or model.Name == otherPart.Name or model:GetAttribute(GameConfig.CAN_HIT) == false then
 			return nil
 		end
+		model:SetAttribute(GameConfig.CAN_HIT, false)
 		cleanup(model)
 		local enemyCharacter = otherPart.Parent
 		local _result = enemyCharacter
@@ -143,6 +149,6 @@ RunService.Stepped:Connect(function()
 	Workspace:BulkMoveTo(p, cfs, Enum.BulkMoveMode.FireCFrameChanged)
 end)
 Network.AttackEvent.OnServerEvent:Connect(function(player, args)
-	onAttack(player)
+	return onAttack(player)
 end)
 return nil

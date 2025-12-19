@@ -1,26 +1,6 @@
 import { RunService } from "@rbxts/services";
 
-let server
-if ( RunService.IsServer() === true ) {
-    const data = {
-
-        DATA_NAME: "unknown",
-        DATA_TEMPLATE: {
-            cash: 1000,
-            
-            inventory: {
-                weapons: {},
-                armores: {},
-            },
-        }
-
-    }
-    server = data
-}
-
 export default {
-
-    server: server,
 
     isServer: RunService.IsServer(),
     isStudio: RunService.IsStudio(),
@@ -30,18 +10,19 @@ export default {
         DATA_NAME: "unknown",
         DATA_TEMPLATE: {
             cash: 1000,
-            
-            inventory: {
-                weapons: [],
-                armores: [],
-            },
+
+            inventory: new Map<string, Item>(),
         },
 
 
 
     // Weapons
         WEAPON_ATTRIBUTE: "WEAPON_ATTRIBUTE",
-        FIRE_STAFF: "FIRE_STAFF",
+        FIRE_STAFF: "FireStaff",
+
+        CAN_HIT: "CAN_HIT",
+        COOLDOWN: "COOLDOWN",
+        LAST_WEAPON: "LAST_WEAPON",
 
     // Armore
         ARMORE_ATTRIBUTE: "ARMORE_ATTRIBUTE",

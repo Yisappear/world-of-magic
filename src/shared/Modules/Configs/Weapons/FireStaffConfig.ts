@@ -13,22 +13,30 @@ export default {
 
     model: fireStaff,
     damage: 20,
+    cooldown: 1.5,
     animation: "",
 
     projectileModel: fireball,
     projectileSpeed: 40,
 
-    getStartPosition: (player: Player): CFrame => {
+    getStartPosition: (player: Player): [Vector3, Vector3] => {
         const playerCharacter = getCharacterFromPlayer(player);
         const playerHumanoidRootPart = playerCharacter.FindFirstChild("HumanoidRootPart") as BasePart;
 
-        const lookVector = playerHumanoidRootPart.CFrame.LookVector;
-        const position = playerHumanoidRootPart.CFrame.Position;
+        const lookVector = playerHumanoidRootPart.CFrame.Rotation;
+        const position = playerHumanoidRootPart.Position;
 
-        const direction = position.sub(lookVector);
-        const offset = direction.add(new Vector3(3, 5, 0));
+        const direction = lookVector.LookVector;
+        const right = playerHumanoidRootPart.CFrame.RightVector;
+        const up = playerHumanoidRootPart.CFrame.UpVector;
 
-        return CFrame.lookAlong(offset, lookVector);
+        const offset = 
+            position
+                .add(direction.mul(2))
+                .add(right.mul(2))
+                .add(up.mul(1))
+
+        return [offset, direction];
     },
 
     getMovePosition: (
@@ -43,15 +51,15 @@ export default {
         const distance = speed * t;
         
         let newVector = startPosition.add(direction.mul(distance));
-        let lookAt!: Vector3;
+        let lookAt = direction;
+        let up = new Vector3(0, 1, 0)
 
-        const downOffset = new Vector3(0, -0.3, 0);
-        if ( t >= 2 ) {
-            newVector = newVector.add(downOffset);
-            lookAt = direction.add(downOffset);
+        if ( t > 5 ) {
+            const downOffset = new Vector3(0, -1, 0);
+            lookAt = direction.mul(downOffset);
         }
 
-        return new CFrame(newVector, lookAt);
+        return CFrame.lookAlong(newVector, lookAt, up);
     },
 
 }

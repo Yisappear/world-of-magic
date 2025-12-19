@@ -29,7 +29,8 @@ local default = {
 		},
 	},
 	WEAPON_ATTRIBUTE = "WEAPON_ATTRIBUTE",
-	FIRE_STAFF = "FIRE_STAFF",
+	FIRE_STAFF = "FireStaff",
+	CAN_HIT = "CAN_HIT",
 	ARMORE_ATTRIBUTE = "ARMORE_ATTRIBUTE",
 }
 return {

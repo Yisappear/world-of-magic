@@ -20,11 +20,17 @@ local default = {
 		local playerCharacter = getCharacterFromPlayer(player)
 		local playerHumanoidRootPart = playerCharacter:FindFirstChild("HumanoidRootPart")
 		local lookVector = playerHumanoidRootPart.CFrame.LookVector
-		local position = playerHumanoidRootPart.CFrame.Position
-		local direction = position - lookVector
-		local _vector3 = Vector3.new(3, 5, 0)
-		local offset = direction + _vector3
-		return CFrame.lookAlong(offset, lookVector)
+		local position = playerHumanoidRootPart.Position
+		local direction = Vector3.new(lookVector.X, 0, lookVector.Z).Unit
+		local right = playerHumanoidRootPart.CFrame.RightVector
+		local up = playerHumanoidRootPart.CFrame.UpVector
+		print(up)
+		local _arg0 = direction * 2
+		local _exp = position + _arg0
+		local _arg0_1 = right * 2
+		local _arg0_2 = up * 1
+		local offset = _exp + _arg0_1 + _arg0_2
+		return CFrame.lookAlong(offset, direction)
 	end,
 	getMovePosition = function(createTime, speed, startPosition, direction)
 		local currentTime = Workspace:GetServerTimeNow()
@@ -33,13 +39,13 @@ local default = {
 		local _startPosition = startPosition
 		local _arg0 = direction * distance
 		local newVector = _startPosition + _arg0
-		local lookAt
-		local downOffset = Vector3.new(0, -0.3, 0)
-		if t >= 2 then
-			newVector = newVector + downOffset
-			lookAt = direction + downOffset
+		local lookAt = direction
+		local up = Vector3.new(0, 1, 0)
+		if t > 5 then
+			local downOffset = Vector3.new(0, -1, 0)
+			lookAt = direction * downOffset
 		end
-		return CFrame.new(newVector, lookAt)
+		return CFrame.lookAlong(newVector, lookAt, up)
 	end,
 }
 return {

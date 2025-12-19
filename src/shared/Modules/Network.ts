@@ -32,18 +32,7 @@ function getEvent(name: string, folder: Folder, eventType: "RemoteEvent" | "Remo
 }
 
 // setup
-let server
-if ( RunService.IsServer() ) {
-    const data = {
-
-    }
-    server = data;
-}
-
 export default {
-
-    server: server,
-
 
     // RemoteEvents
 
@@ -61,6 +50,8 @@ export default {
             UnequipItemEvent: getEvent("UnequipItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
 
             // Weapon
+                EquipWeaponEvent: getEvent("EquipWeapon", InventoryEvents, "RemoteEvent") as RemoteEvent,
+                UnequipWeaponEvent: getEvent("UnequipWeapon", InventoryEvents, "RemoteEvent") as RemoteEvent,
             // Armore
                 EquipArmoreEvent: getEvent("EquipArmore", InventoryEvents, "RemoteEvent") as RemoteEvent,
 

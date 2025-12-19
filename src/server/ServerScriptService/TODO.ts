@@ -5,10 +5,15 @@ world-of-magic
     TODO:
        fix:
             inventory UI:
-                - close button -> text position
+                - close button text -> text position
                 - equip, sell -> font or color
                 - equip, sell -> visible
+            
+            weapon client:
+                [X] double click
 
+            weapon server:
+                - move down why?????????????
 
 
 
@@ -17,12 +22,13 @@ world-of-magic
         [X] weapon system
         [X] firestaff config
         [X] inventory UI create/delete imagebutton in inventory list
+        [X] weapon system / cooldown
+        [X] INVENOTORY server | Equip, Unequip, Sell
 
-
+        - inventory ui / events
 
 
         new:
-            - INVENOTORY server | Equip, Unequip, Sell, MoveTo Equipped
             - Projectile client Fireball
             - Weapon render when equip
             - Reward service + Boosts

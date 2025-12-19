@@ -1,17 +1,15 @@
 import { ContextActionService, RunService } from "@rbxts/services";
 import Network from "shared/Modules/Network";
 
+function onEquip(): void {
 
+    let lastClick = 0;
 
-function renderWeapon() {}
+    function onClick(actionName: string, state: Enum.UserInputState, inputObject: InputObject) {
+        const t = os.clock();
+        if ( (t - lastClick) < 0.5 ) return; // anti double click
+        lastClick = t;
 
-
-
-
-
-function onEquip(name: string): void {
-
-    function onClick() {
         Network.AttackEvent.FireServer();
     }
 
@@ -23,3 +21,13 @@ function onUnequip(): void {
     // unbind CAS
     ContextActionService.UnbindAction("Attack");
 }
+
+//TEST
+    onEquip();
+    task.wait(10)
+    print(`Unbind attack test`);
+    onUnequip();
+
+// setup
+Network.EquipWeaponEvent.OnClientEvent.Connect(args => onEquip());
+Network.UnequipWeaponEvent.OnClientEvent.Connect(args => onUnequip());

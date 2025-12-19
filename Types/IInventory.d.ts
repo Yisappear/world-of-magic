@@ -1,20 +1,13 @@
 interface Item {
-    uuid: string,
-    icon: string,
+    name: string,
+    itemType: "Weapon" | "Armore",
+    armoreType?: "Hat" | "Torse" | "Legs",
+    equipped: boolean,
 }
 
-interface AddItemData {
-    itemType: "Weapon" | "Armore",
-    itemIcon: string,
-    itemUUID: string,
-}
-
-interface DelItemData {
-    itemType: "Weapon" | "Armore",
-    itemUUID: string,
-}
+type ItemType = "Weapon" | "Armore" 
 
 interface ItemData {
-    itemUUID: string,
-    itemIcon: string,
+    uuid: string,
+    name: string,
 }

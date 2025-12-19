@@ -60,35 +60,56 @@ function getServerProjectile(projectile: BasePart): BasePart {
     part.Parent = Workspace;
     part.Size = projectile.Size;
     part.CanCollide = false;
+    part.Transparency = 0.5;
 
     return part;
 }
 
 function onAttack(player: Player): void {
+
+    const createTime = Workspace.GetServerTimeNow();
+    
     const weaponName = player.GetAttribute(GameConfig.WEAPON_ATTRIBUTE) as string ?? GameConfig.FIRE_STAFF as string;
-    const config = require(WeaponConfigs.FindFirstChild(`${weaponName}` + "Config") as ModuleScript) as WeaponConfig;
+    const configName = `${weaponName}` + "Config"
+    const configModule = require(WeaponConfigs.FindFirstChild(configName) as ModuleScript) as { default: WeaponConfig };
+    const config = configModule.default as WeaponConfig;
+
+    // cooldown
+    const cooldown = player.GetAttribute(GameConfig.COOLDOWN) as number ?? 0;
+    const lastWeapon = player.GetAttribute(GameConfig.LAST_WEAPON) ?? GameConfig.FIRE_STAFF;
+    if ( (createTime - cooldown) < config.cooldown 
+        && lastWeapon === weaponName
+    ) return;
+    player.SetAttribute(GameConfig.COOLDOWN, createTime);
+    player.SetAttribute(GameConfig.LAST_WEAPON, weaponName);
 
     const model = getServerProjectile(config.projectileModel);
-    const cf = config.getStartPosition(player);
+    const [position, lookVector] = config.getStartPosition(player);
 
-    const startPosition = cf.Position;
-    const direction = cf.LookVector;
+    const startPosition = position;
+    const direction = lookVector;
 
     const playerCharacter = getCharacterFromPlayer(player);
     
     projectiles.push({
         config: config,
         owner: player,
-        createTime: Workspace.GetServerTimeNow(),
+        createTime: createTime,
         model: model,
         speed: config.projectileSpeed,
         startPosition: startPosition,
         direction: direction,
     })
 
+    model.SetAttribute(GameConfig.CAN_HIT, true);
     model.Touched.Connect(otherPart => {
-        if ( otherPart.Parent === playerCharacter ) return;
+        if ( 
+            otherPart.Parent === playerCharacter ||
+            model.Name === otherPart.Name ||
+            model.GetAttribute(GameConfig.CAN_HIT) === false
+            ) return;
 
+        model.SetAttribute(GameConfig.CAN_HIT, false);
         cleanup(model);
         
         const enemyCharacter = otherPart.Parent
@@ -148,4 +169,4 @@ RunService.Stepped.Connect(() => {
     Workspace.BulkMoveTo(p, cfs, Enum.BulkMoveMode.FireCFrameChanged);
 });
 
-Network.AttackEvent.OnServerEvent.Connect((player: Player, args) => {onAttack(player);});
+Network.AttackEvent.OnServerEvent.Connect((player: Player, args) => onAttack(player));
