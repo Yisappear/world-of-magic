@@ -12,11 +12,7 @@ local function onUnequip(player)
 		player:Kick("rejoin please, you're profile dont loaded")
 		return nil
 	end
-	local armoreInventory = profile.Data.inventory.armores
-	for _, object in armoreInventory do
-		local armore = object
-		armore.equipped = false
-	end
+	local armoreInventory = profile.Data.inventory
 	player:SetAttribute(GameConfig.ARMORE_ATTRIBUTE, 0)
 end
 local function onEquip(player)
@@ -26,15 +22,7 @@ local function onEquip(player)
 		return nil
 	end
 	local equipped
-	local armoreInventory = profile.Data.inventory.armores
-	for _, object in armoreInventory do
-		local armore = object
-		if armore.equipped == true then
-			equipped = armore.name
-			player:SetAttribute(GameConfig.ARMORE_ATTRIBUTE, armore.damageDef)
-			return nil
-		end
-	end
+	local armoreInventory = profile.Data.inventory
 	-- render armore on character
 end
 Network.EquipArmoreEvent.OnServerEvent:Connect(function() end)

@@ -1,5 +1,4 @@
 import React from "@rbxts/react";
-import TextClose from "../Labels/text-close";
 
 interface Props {
     onClick: VoidFunction,
@@ -17,7 +16,19 @@ export default function CloseButton(props: Props): React.Element {
             Event={ { MouseButton1Click: () => { props.onClick() } } }
         >
 
-        <TextClose />
+            <textlabel
+                Position={ UDim2.fromScale(0, -0.07) }
+                Size={ UDim2.fromScale(0.45, 0.15) }
+                BackgroundColor3={ Color3.fromRGB(255, 255, 255) }
+                BackgroundTransparency={ 1 }
+                Visible={ true }
+                ClipsDescendants={ false }
+
+                Text={ "Close" }
+                FontFace={ new Font("Ubuntu", Enum.FontWeight.Bold) }
+                TextColor3={ Color3.fromRGB(0, 0, 0) }
+                TextScaled={ true }
+            />
 
         </imagebutton>
     )

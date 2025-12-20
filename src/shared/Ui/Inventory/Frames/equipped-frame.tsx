@@ -1,3 +1,4 @@
+import { ReplicatedStorage } from "@rbxts/services";
 import React from "@rbxts/react";
 import Network from "shared/Modules/Network";
 import TextEquipped from "../Labels/text-equipped";
@@ -11,24 +12,40 @@ interface Props {
 export default function EquippedFrame(props: Props): React.Element {
 
     // hooks
-    const [items, setItem] = React.useState<Item[]>([]);   
+    const [items, setItem] = React.useState<ClientItemData[]>([]);   
     React.useEffect(() => {
 
         const equipConnection = Network.EquipItemEvent.OnClientEvent.Connect(args => {
-            const item = args as ItemData;
+            const item = args as ClientItemData;
+
+           function getIcon(itemType: string, name: string): string {
+                if ( itemType === "Weapon" ) {
+                    const config = require(ReplicatedStorage.FindFirstChild("Modules")?.FindFirstChild("Configs")?.FindFirstChild("Weapons")?.FindFirstChild(name + "Config") as ModuleScript) as WeaponConfig;
+                    const icon = config.icon;
+                    return icon;
+                }
+                if ( itemType === "Armore" ) {
+                    const config = "";
+                    const icon = "";
+                    return icon;
+                }
+                return "";
+            }
 
             setItem(prev => [
-                ...prev,
+                ...prev, 
                 {
-                    uuid: item.itemUUID,
-                    icon: item.itemIcon,
-                }
+                    uuid: item.uuid,
+                    name: item.name,
+                    itemType: item.itemType,
+                    icon: getIcon(item.itemType, item.name),
+                },
             ])
         })
 
         const unequipConnction = Network.UnequipItemEvent.OnClientEvent.Connect(args => {
             const item = args as ItemData;
-            setItem(prev => prev.filter(i => i.uuid !== item.itemUUID));
+            setItem(prev => prev.filter(i => i.uuid !== item.uuid));
         })
 
 
@@ -69,11 +86,9 @@ export default function EquippedFrame(props: Props): React.Element {
                     <EquippedItemButton
                         key={ button.uuid }
                         icon={ button.icon }
-                        onClick={ () => { print('WHAEH') } }
+                        onClick={ () => { Network.SelectItemEvent.Fire(button); } }
                     />
                 ))}
-
-
 
             </frame>
         </frame>

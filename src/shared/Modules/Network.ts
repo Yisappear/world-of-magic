@@ -7,7 +7,7 @@ const WeaponEvents = Events.FindFirstChild("WeaponEvents") as Folder;
 const ProjectileEvents = Events.FindFirstChild("ProjectilesEvents") as Folder;
 
 // private functions
-function getEvent(name: string, folder: Folder, eventType: "RemoteEvent" | "RemoteFunction") {
+function getEvent(name: string, folder: Folder, eventType: "RemoteEvent" | "RemoteFunction" | "BindableEvent" | "BindableFunction") {
 
     const isEvent = folder.FindFirstChild(name) as RemoteEvent | RemoteFunction;
     if ( isEvent !== undefined) return isEvent;
@@ -45,9 +45,13 @@ export default {
 
         // Inventory
             AddItemEvent: getEvent("AddItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
+            GiveItemEvent: getEvent("GiveItem", InventoryEvents, "BindableEvent") as BindableEvent,
             DelItemEvent: getEvent("DelItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
             EquipItemEvent: getEvent("EquipItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
             UnequipItemEvent: getEvent("UnequipItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
+            SelectItemEvent: getEvent("SelectItem", InventoryEvents, "BindableEvent") as BindableEvent,
+            CloseInventoryEvent: getEvent("CloseInventory", InventoryEvents, "BindableEvent") as BindableEvent,
+            IsEquipped: getEvent("IsEquipped", InventoryEvents, "RemoteFunction") as RemoteFunction,
 
             // Weapon
                 EquipWeaponEvent: getEvent("EquipWeapon", InventoryEvents, "RemoteEvent") as RemoteEvent,

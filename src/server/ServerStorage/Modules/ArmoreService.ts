@@ -12,11 +12,8 @@ function onUnequip(player: Player): void {
         return;
     }
     
-    const armoreInventory = profile.Data.inventory.armores;
-    for (const object of  armoreInventory) {
-        const armore = object as Armore;
-        armore.equipped = false;
-    }
+    const armoreInventory = profile.Data.inventory;
+    
     player.SetAttribute(GameConfig.ARMORE_ATTRIBUTE, 0);
 }
 
@@ -29,16 +26,8 @@ function onEquip(player: Player): void {
 
     let equipped!: string
 
-    const armoreInventory = profile.Data.inventory.armores;
-    for (const object of  armoreInventory) {
-        const armore = object as Armore;
-        if ( armore.equipped === true ) {
-            equipped = armore.name;
-
-            player.SetAttribute(GameConfig.ARMORE_ATTRIBUTE, armore.damageDef);
-            return;
-        }
-    }
+    const armoreInventory = profile.Data.inventory;
+    
 
     // render armore on character
 

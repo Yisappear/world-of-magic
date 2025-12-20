@@ -13,24 +13,25 @@ local fireball = WeaponAssets:FindFirstChild("Fireball")
 local default = {
 	model = fireStaff,
 	damage = 20,
+	cooldown = 1.5,
 	animation = "",
+	icon = "",
 	projectileModel = fireball,
 	projectileSpeed = 40,
 	getStartPosition = function(player)
 		local playerCharacter = getCharacterFromPlayer(player)
 		local playerHumanoidRootPart = playerCharacter:FindFirstChild("HumanoidRootPart")
-		local lookVector = playerHumanoidRootPart.CFrame.LookVector
+		local lookVector = playerHumanoidRootPart.CFrame.Rotation
 		local position = playerHumanoidRootPart.Position
-		local direction = Vector3.new(lookVector.X, 0, lookVector.Z).Unit
+		local direction = lookVector.LookVector
 		local right = playerHumanoidRootPart.CFrame.RightVector
 		local up = playerHumanoidRootPart.CFrame.UpVector
-		print(up)
 		local _arg0 = direction * 2
 		local _exp = position + _arg0
 		local _arg0_1 = right * 2
 		local _arg0_2 = up * 1
 		local offset = _exp + _arg0_1 + _arg0_2
-		return CFrame.lookAlong(offset, direction)
+		return { offset, direction }
 	end,
 	getMovePosition = function(createTime, speed, startPosition, direction)
 		local currentTime = Workspace:GetServerTimeNow()

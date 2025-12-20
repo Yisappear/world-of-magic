@@ -1,5 +1,6 @@
 -- Compiled with roblox-ts v3.0.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
+local ReplicatedStorage = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").ReplicatedStorage
 local React = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "react")
 local TextInventoryContent = TS.import(script, game:GetService("ReplicatedStorage"), "Ui", "Inventory", "Labels", "text-inventorycontent").default
 local Network = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Network").default
@@ -12,6 +13,29 @@ local function InventoryFrame(props)
 	React.useEffect(function()
 		local addConnection = Network.AddItemEvent.OnClientEvent:Connect(function(args)
 			local item = args
+			local function getIcon(itemType, name)
+				if itemType == "Weapon" then
+					local _result = ReplicatedStorage:FindFirstChild("Modules")
+					if _result ~= nil then
+						_result = _result:FindFirstChild("Configs")
+						if _result ~= nil then
+							_result = _result:FindFirstChild("Weapons")
+							if _result ~= nil then
+								_result = _result:FindFirstChild(name .. "Config")
+							end
+						end
+					end
+					local config = require(_result)
+					local icon = config.icon
+					return icon
+				end
+				if itemType == "Armore" then
+					local config = ""
+					local icon = ""
+					return icon
+				end
+				return ""
+			end
 			if item.itemType == "Weapon" then
 				setWeapon(function(prev)
 					local _array = {}
@@ -20,8 +44,10 @@ local function InventoryFrame(props)
 					table.move(prev, 1, _prevLength, _length + 1, _array)
 					_length += _prevLength
 					_array[_length + 1] = {
-						uuid = item.itemUUID,
-						icon = item.itemIcon,
+						uuid = item.uuid,
+						name = item.name,
+						itemType = item.itemType,
+						icon = getIcon(item.itemType, item.name),
 					}
 					return _array
 				end)
@@ -34,8 +60,10 @@ local function InventoryFrame(props)
 					table.move(prev, 1, _prevLength, _length + 1, _array)
 					_length += _prevLength
 					_array[_length + 1] = {
-						uuid = item.itemUUID,
-						icon = item.itemIcon,
+						uuid = item.uuid,
+						name = item.name,
+						itemType = item.itemType,
+						icon = getIcon(item.itemType, item.name),
 					}
 					return _array
 				end)
@@ -48,7 +76,7 @@ local function InventoryFrame(props)
 					-- ▼ ReadonlyArray.filter ▼
 					local _newValue = {}
 					local _callback = function(i)
-						return i.uuid ~= item.itemUUID
+						return i.uuid ~= item.uuid
 					end
 					local _length = 0
 					for _k, _v in prev do
@@ -66,7 +94,7 @@ local function InventoryFrame(props)
 					-- ▼ ReadonlyArray.filter ▼
 					local _newValue = {}
 					local _callback = function(i)
-						return i.uuid ~= item.itemUUID
+						return i.uuid ~= item.uuid
 					end
 					local _length = 0
 					for _k, _v in prev do
@@ -97,7 +125,13 @@ local function InventoryFrame(props)
 			key = button.uuid,
 			icon = button.icon,
 			onClick = function()
-				print("you click on weapon item")
+				local itemData = {
+					uuid = button.uuid,
+					name = button.name,
+					itemType = button.itemType,
+				}
+				print(button.uuid)
+				Network.SelectItemEvent:Fire(itemData)
 			end,
 		})
 	end
@@ -112,7 +146,12 @@ local function InventoryFrame(props)
 			key = button.uuid,
 			icon = button.icon,
 			onClick = function()
-				print("you click on armore item")
+				local itemData = {
+					uuid = button.uuid,
+					name = button.name,
+					itemType = button.itemType,
+				}
+				Network.SelectItemEvent:Fire(itemData)
 			end,
 		})
 	end

@@ -2,11 +2,14 @@
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local ContextActionService = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").ContextActionService
 local Network = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Network").default
-local function renderWeapon()
-end
-local function onEquip(name)
-	local function onClick()
-		print(`onClick`)
+local function onEquip()
+	local lastClick = 0
+	local function onClick(actionName, state, inputObject)
+		local t = os.clock()
+		if (t - lastClick) < 0.5 then
+			return nil
+		end
+		lastClick = t
 		Network.AttackEvent:FireServer()
 	end
 	-- bind CAS
@@ -17,5 +20,15 @@ local function onUnequip()
 	ContextActionService:UnbindAction("Attack")
 end
 --TEST
-onEquip("")
+onEquip()
+task.wait(10)
+print(`Unbind attack test`)
+onUnequip()
+-- setup
+Network.EquipWeaponEvent.OnClientEvent:Connect(function(args)
+	return onEquip()
+end)
+Network.UnequipWeaponEvent.OnClientEvent:Connect(function(args)
+	return onUnequip()
+end)
 return nil

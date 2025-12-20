@@ -2,6 +2,7 @@ import { Players, RunService, HttpService } from "@rbxts/services";
 import ProfileStore from "@rbxts/profile-store";
 import GameConfig from "shared/Modules/Configs/GameConfig";
 import Network from "shared/Modules/Network";
+import { addItem } from "./Inventory";
 
 // constants
 const PlayerStore = ProfileStore.New(GameConfig.DATA_NAME, GameConfig.DATA_TEMPLATE);
@@ -23,22 +24,27 @@ function loadProfile(player: Player): void {
         cash.Value = profile.Data.cash;
 
 
-
-        const weaponData: AddItemData = {
-            itemType: "Weapon",
-            itemIcon: "",
-            itemUUID: HttpService.GenerateGUID(false),
-        }
-        Network.AddItemEvent.FireClient(player, weaponData)
-        const armoreData: AddItemData = {
-            itemType: "Armore",
-            itemIcon: "",
-            itemUUID: HttpService.GenerateGUID(false),
-        }
-        Network.AddItemEvent.FireClient(player, armoreData)
-
-
-
+    const item: Item = {
+        name: GameConfig.FIRE_STAFF,
+        itemType: "Weapon",
+        equipped: false,
+    };
+    const armore: Item = {
+        name: GameConfig.FIRE_STAFF,
+        itemType: "Armore",
+        armoreType: "Hat",
+        equipped: false,
+    }
+    task.wait(7)
+    Network.GiveItemEvent.Fire(player , item)
+    Network.GiveItemEvent.Fire(player , item)
+    Network.GiveItemEvent.Fire(player , armore)
+    Network.GiveItemEvent.Fire(player , armore)
+    Network.GiveItemEvent.Fire(player , armore)
+    Network.GiveItemEvent.Fire(player , armore)
+    Network.GiveItemEvent.Fire(player , armore)
+    Network.GiveItemEvent.Fire(player , armore)
+    
 
 }
 

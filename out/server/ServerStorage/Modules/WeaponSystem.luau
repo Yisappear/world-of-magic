@@ -64,7 +64,7 @@ local function getServerProjectile(projectile)
 	return part
 end
 local function onAttack(player)
-	print("onAttack")
+	local createTime = Workspace:GetServerTimeNow()
 	local _condition = player:GetAttribute(GameConfig.WEAPON_ATTRIBUTE)
 	if _condition == nil then
 		_condition = GameConfig.FIRE_STAFF
@@ -73,15 +73,33 @@ local function onAttack(player)
 	local configName = `{weaponName}` .. "Config"
 	local configModule = require(WeaponConfigs:FindFirstChild(configName))
 	local config = configModule.default
+	-- cooldown
+	local _condition_1 = player:GetAttribute(GameConfig.COOLDOWN)
+	if _condition_1 == nil then
+		_condition_1 = 0
+	end
+	local cooldown = _condition_1
+	local _condition_2 = player:GetAttribute(GameConfig.LAST_WEAPON)
+	if _condition_2 == nil then
+		_condition_2 = GameConfig.FIRE_STAFF
+	end
+	local lastWeapon = _condition_2
+	if (createTime - cooldown) < config.cooldown and lastWeapon == weaponName then
+		return nil
+	end
+	player:SetAttribute(GameConfig.COOLDOWN, createTime)
+	player:SetAttribute(GameConfig.LAST_WEAPON, weaponName)
 	local model = getServerProjectile(config.projectileModel)
-	local cf = config.getStartPosition(player)
-	local startPosition = cf.Position
-	local direction = cf.LookVector
+	local _binding = config.getStartPosition(player)
+	local position = _binding[1]
+	local lookVector = _binding[2]
+	local startPosition = position
+	local direction = lookVector
 	local playerCharacter = getCharacterFromPlayer(player)
 	local _arg0 = {
 		config = config,
 		owner = player,
-		createTime = Workspace:GetServerTimeNow(),
+		createTime = createTime,
 		model = model,
 		speed = config.projectileSpeed,
 		startPosition = startPosition,
@@ -107,16 +125,16 @@ local function onAttack(player)
 			return nil
 		end
 		if enemyPlayer ~= nil then
-			local _condition_1 = enemyPlayer:GetAttribute(GameConfig.ARMORE_ATTRIBUTE)
-			if _condition_1 == nil then
-				_condition_1 = 0
+			local _condition_3 = enemyPlayer:GetAttribute(GameConfig.ARMORE_ATTRIBUTE)
+			if _condition_3 == nil then
+				_condition_3 = 0
 			end
-			enemyArmore = _condition_1
+			enemyArmore = _condition_3
 		end
 		task.spawn(function()
-			local _binding = isDamageAndKill(enemyHumanoid, enemyArmore, config.damage)
-			local isDamage = _binding[1]
-			local isKill = _binding[2]
+			local _binding_1 = isDamageAndKill(enemyHumanoid, enemyArmore, config.damage)
+			local isDamage = _binding_1[1]
+			local isKill = _binding_1[2]
 			if isDamage == false then
 				warn(`isDamage, got false`)
 			end

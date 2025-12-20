@@ -1,4 +1,4 @@
-import { HttpService } from "@rbxts/services";
+import { HttpService, ReplicatedStorage } from "@rbxts/services";
 import React from "@rbxts/react";
 import TextInventoryContent from "../Labels/text-inventorycontent";
 import Network from "shared/Modules/Network";
@@ -13,19 +13,35 @@ interface Props {
 export default function InventoryFrame(props: Props): React.Element {
 
     // hooks
-    const [armores, setArmore] = React.useState<Item[]>([]);
-    const [weapons, setWeapon] = React.useState<Item[]>([]);
+    const [armores, setArmore] = React.useState<ClientItemData[]>([]);
+    const [weapons, setWeapon] = React.useState<ClientItemData[]>([]);
     React.useEffect(() => {
 
         const addConnection = Network.AddItemEvent.OnClientEvent.Connect(args => {
-            const item = args as AddItemData;
+            const item = args as ClientItemData;
+
+            function getIcon(itemType: string, name: string): string {
+                if ( itemType === "Weapon" ) {
+                    const config = require(ReplicatedStorage.FindFirstChild("Modules")?.FindFirstChild("Configs")?.FindFirstChild("Weapons")?.FindFirstChild(name + "Config") as ModuleScript) as WeaponConfig;
+                    const icon = config.icon;
+                    return icon;
+                }
+                if ( itemType === "Armore" ) {
+                    const config = "";
+                    const icon = "";
+                    return icon;
+                }
+                return "";
+            }
 
             if ( item.itemType === "Weapon" ) {
                 setWeapon(prev => [
                     ...prev, 
                     {
-                        uuid: item.itemUUID,
-                        icon: item.itemIcon,
+                        uuid: item.uuid,
+                        name: item.name,
+                        itemType: item.itemType,
+                        icon: getIcon(item.itemType, item.name),
                     },
                 ])
             }
@@ -33,21 +49,23 @@ export default function InventoryFrame(props: Props): React.Element {
                 setArmore(prev => [
                     ...prev, 
                     {
-                        uuid: item.itemUUID,
-                        icon: item.itemIcon,
+                        uuid: item.uuid,
+                        name: item.name,
+                        itemType: item.itemType,
+                        icon: getIcon(item.itemType, item.name),
                     },
                 ])
             }
         });
 
         const delConnection = Network.DelItemEvent.OnClientEvent.Connect(args => {
-            const item = args as DelItemData;
+            const item = args as ClientItemData;
 
             if ( item.itemType === "Weapon" ) {
-                setWeapon(prev => prev.filter(i => i.uuid !== item.itemUUID));
+                setWeapon(prev => prev.filter(i => i.uuid !== item.uuid));
             }
             if ( item.itemType === "Armore" ) {
-                setArmore(prev => prev.filter(i => i.uuid !== item.itemUUID));
+                setArmore(prev => prev.filter(i => i.uuid !== item.uuid));
             }
         });
 
@@ -56,8 +74,6 @@ export default function InventoryFrame(props: Props): React.Element {
             delConnection.Disconnect();
         })
     }, []);
-
-
 
     return (
         <frame
@@ -89,7 +105,15 @@ export default function InventoryFrame(props: Props): React.Element {
                     <WeaponItemButton
                         key={ button.uuid }
                         icon={ button.icon }
-                        onClick={ () => { print("you click on weapon item") } }
+                        onClick={ () => { 
+                            const itemData: ItemData = {
+                                uuid: button.uuid,
+                                name: button.name,
+                                itemType: button.itemType,
+                            }
+                            print(button.uuid)
+                            Network.SelectItemEvent.Fire(itemData); 
+                        } }
                     />
                 ))}
 
@@ -97,7 +121,14 @@ export default function InventoryFrame(props: Props): React.Element {
                     <ArmoreItemButton
                         key={ button.uuid }
                         icon={ button.icon }
-                        onClick={ () => { print("you click on armore item") } }
+                        onClick={ () => { 
+                            const itemData: ItemData = {
+                                uuid: button.uuid,
+                                name: button.name,
+                                itemType: button.itemType,
+                            }
+                            Network.SelectItemEvent.Fire(itemData); 
+                        } }
                     />
                 ))}
 

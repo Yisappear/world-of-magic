@@ -10,4 +10,9 @@ type ItemType = "Weapon" | "Armore"
 interface ItemData {
     uuid: string,
     name: string,
+    itemType: ItemType,
+}
+
+interface ClientItemData extends ItemData {
+    icon: string
 }

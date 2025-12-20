@@ -15,6 +15,7 @@ export default {
     damage: 20,
     cooldown: 1.5,
     animation: "",
+    icon: "",
 
     projectileModel: fireball,
     projectileSpeed: 40,

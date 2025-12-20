@@ -1,8 +1,6 @@
 -- Compiled with roblox-ts v3.0.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
-local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services")
-local Players = _services.Players
-local HttpService = _services.HttpService
+local Players = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").Players
 local ProfileStore = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "profile-store", "src")
 local GameConfig = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Configs", "GameConfig").default
 local Network = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Network").default
@@ -22,18 +20,26 @@ local function loadProfile(player)
 	local leaderstats = player:FindFirstChild("leaderstats")
 	local cash = leaderstats:FindFirstChild("Cash")
 	cash.Value = profile.Data.cash
-	local weaponData = {
+	local item = {
+		name = GameConfig.FIRE_STAFF,
 		itemType = "Weapon",
-		itemIcon = "",
-		itemUUID = HttpService:GenerateGUID(false),
+		equipped = false,
 	}
-	Network.AddItemEvent:FireClient(player, weaponData)
-	local armoreData = {
+	local armore = {
+		name = GameConfig.FIRE_STAFF,
 		itemType = "Armore",
-		itemIcon = "",
-		itemUUID = HttpService:GenerateGUID(false),
+		armoreType = "Hat",
+		equipped = false,
 	}
-	Network.AddItemEvent:FireClient(player, armoreData)
+	task.wait(7)
+	Network.GiveItemEvent:Fire(player, item)
+	Network.GiveItemEvent:Fire(player, item)
+	Network.GiveItemEvent:Fire(player, armore)
+	Network.GiveItemEvent:Fire(player, armore)
+	Network.GiveItemEvent:Fire(player, armore)
+	Network.GiveItemEvent:Fire(player, armore)
+	Network.GiveItemEvent:Fire(player, armore)
+	Network.GiveItemEvent:Fire(player, armore)
 end
 local function useLoader(player)
 	-- leaderstats

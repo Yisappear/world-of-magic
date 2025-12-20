@@ -22,12 +22,6 @@ function onUnequip(): void {
     ContextActionService.UnbindAction("Attack");
 }
 
-//TEST
-    onEquip();
-    task.wait(10)
-    print(`Unbind attack test`);
-    onUnequip();
-
 // setup
 Network.EquipWeaponEvent.OnClientEvent.Connect(args => onEquip());
 Network.UnequipWeaponEvent.OnClientEvent.Connect(args => onUnequip());

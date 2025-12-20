@@ -3,6 +3,7 @@ interface WeaponConfig {
     damage: number,
     cooldown: number,
     animation: string,
+    icon: string,
     projectileModel: BasePart | MeshPart,
     projectileSpeed: number,
     getStartPosition: (player: Player) => [Vector3, Vector3],

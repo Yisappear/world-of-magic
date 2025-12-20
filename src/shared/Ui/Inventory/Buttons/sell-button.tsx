@@ -17,7 +17,7 @@ export default function SellButton(props: Props): React.Element {
 
             Text={ "Sell" }
             FontFace={ new Font("Ubuntu", Enum.FontWeight.Bold) }
-            TextColor3={ Color3.fromRGB(0, 0, 0) }
+            TextColor3={ Color3.fromRGB(255, 255, 255) }
             TextScaled={ true }
 
             Event={ { MouseButton1Click: () => { props.onClick() } } }

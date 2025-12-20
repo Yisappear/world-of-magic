@@ -37,19 +37,19 @@ local function getEvent(name, folder, eventType)
 	end
 end
 -- setup
-local server
-if RunService:IsServer() then
-	local data = {}
-	server = data
-end
 local default = {
-	server = server,
 	AttackEvent = getEvent("Attack", WeaponEvents, "RemoteEvent"),
 	RenderEvent = getEvent("Render", ProjectileEvents, "RemoteEvent"),
 	AddItemEvent = getEvent("AddItem", InventoryEvents, "RemoteEvent"),
+	GiveItemEvent = getEvent("GiveItem", InventoryEvents, "BindableEvent"),
 	DelItemEvent = getEvent("DelItem", InventoryEvents, "RemoteEvent"),
 	EquipItemEvent = getEvent("EquipItem", InventoryEvents, "RemoteEvent"),
 	UnequipItemEvent = getEvent("UnequipItem", InventoryEvents, "RemoteEvent"),
+	SelectItemEvent = getEvent("SelectItem", InventoryEvents, "BindableEvent"),
+	CloseInventoryEvent = getEvent("CloseInventory", InventoryEvents, "BindableEvent"),
+	IsEquipped = getEvent("IsEquipped", InventoryEvents, "RemoteFunction"),
+	EquipWeaponEvent = getEvent("EquipWeapon", InventoryEvents, "RemoteEvent"),
+	UnequipWeaponEvent = getEvent("UnequipWeapon", InventoryEvents, "RemoteEvent"),
 	EquipArmoreEvent = getEvent("EquipArmore", InventoryEvents, "RemoteEvent"),
 }
 return {
