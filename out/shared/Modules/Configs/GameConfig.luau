@@ -7,14 +7,14 @@ local default = {
 	isClient = RunService:IsClient(),
 	DATA_NAME = "unknown",
 	DATA_TEMPLATE = {
-		cash = 1000,
+		cash = 333,
 		inventory = {},
+		settings = {},
 	},
-	WEAPON_ATTRIBUTE = "WEAPON_ATTRIBUTE",
-	FIRE_STAFF = "FireStaff",
-	CAN_HIT = "CAN_HIT",
 	COOLDOWN = "COOLDOWN",
 	LAST_WEAPON = "LAST_WEAPON",
+	WEAPON_ATTRIBUTE = "WEAPON_ATTRIBUTE",
+	FIRE_STAFF = "FireStaff",
 	ARMORE_ATTRIBUTE = "ARMORE_ATTRIBUTE",
 }
 return {

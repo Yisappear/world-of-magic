@@ -8,38 +8,23 @@ local Network = TS.import(script, game:GetService("ReplicatedStorage"), "Modules
 local function WeaponSelectFrame(props)
 	-- equip button
 	local equipVision, equipButton = React.useState(true)
-	local changeVisible = function()
-		return equipButton(function(v)
-			return not v
-		end)
-	end
 	-- vision
 	local frameVision, selectFrame = React.useState(false)
-	local changeFrameVision = function()
-		return selectFrame(function(v)
-			return not v
-		end)
-	end
 	local refExample = {
 		uuid = "aaa",
 		name = "FireStaff",
 		itemType = "Weapon",
 	}
 	local dataRef = React.useRef(refExample)
-	local function onUnequip()
-		Network.UnequipItemEvent:FireServer(dataRef.current)
-	end
-	local function onSell()
-		Network.DelItemEvent:FireServer(dataRef.current)
-	end
 	React.useEffect(function()
 		Network.SelectItemEvent.Event:Connect(function(args)
-			selectFrame(true)
 			if args == nil then
 				return nil
 			end
 			local data = args
 			dataRef.current = data
+			props.voidSelectFramVisible(false)
+			selectFrame(true)
 			equipButton(true)
 			local equipped = Network.IsEquipped:InvokeServer(data.uuid)
 			if equipped == true then
@@ -47,13 +32,10 @@ local function WeaponSelectFrame(props)
 			end
 		end)
 		Network.CloseInventoryEvent.Event:Connect(function()
-			if frameVision == false then
-				return nil
-			end
 			selectFrame(false)
-			if equipVision == false then
-				equipButton(true)
-			end
+			props.voidSelectFramVisible(true)
+			equipButton(true)
+			dataRef.current = refExample
 		end)
 	end, { dataRef })
 	return React.createElement("frame", {
@@ -77,17 +59,24 @@ local function WeaponSelectFrame(props)
 	}, React.createElement(EquipButton, {
 		onClick = function()
 			Network.EquipItemEvent:FireServer(dataRef.current)
-			dataRef.current = refExample
+			local equipped = Network.IsEquipped:InvokeServer(dataRef.current.uuid)
+			if equipped == true then
+				equipButton(false)
+			end
 		end,
 		visible = equipVision,
 	}), React.createElement(UnequipButton, {
 		onClick = function()
-			onUnequip()
+			Network.UnequipItemEvent:FireServer(dataRef.current)
+			local equipped = Network.IsEquipped:InvokeServer(dataRef.current.uuid)
+			if equipped == false then
+				equipButton(true)
+			end
 		end,
 		visible = not equipVision,
 	}), React.createElement(SellButton, {
 		onClick = function()
-			onSell()
+			Network.DelItemEvent:FireServer(dataRef.current)
 		end,
 		visible = true,
 	})))

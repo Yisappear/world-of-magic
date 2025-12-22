@@ -10,7 +10,7 @@ local function TextVoidSelect(props)
 		Visible = true,
 		ClipsDescendants = false,
 		Text = "Select any item",
-		FontFace = Font.new("Ubuntu", Enum.FontWeight.Regular),
+		FontFace = Font.new("Ubuntu", Enum.FontWeight.Bold),
 		TextColor3 = Color3.fromRGB(0, 0, 0),
 		TextScaled = true,
 	})

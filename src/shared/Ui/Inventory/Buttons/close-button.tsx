@@ -1,4 +1,5 @@
 import React from "@rbxts/react";
+import Network from "shared/Modules/Network";
 
 interface Props {
     onClick: VoidFunction,
@@ -13,12 +14,16 @@ export default function CloseButton(props: Props): React.Element {
             BackgroundTransparency={ 0 }
             Visible={ true }
             ClipsDescendants={ false }
-            Event={ { MouseButton1Click: () => { props.onClick() } } }
+            Event={ { MouseButton1Click: () => { 
+                props.onClick();
+                Network.CloseInventoryEvent.Fire();
+            }
+            } }
         >
 
             <textlabel
-                Position={ UDim2.fromScale(0, -0.07) }
-                Size={ UDim2.fromScale(0.45, 0.15) }
+                Position={ UDim2.fromScale(0.2, 0.3) }
+                Size={ UDim2.fromScale(0.65, 0.25) }
                 BackgroundColor3={ Color3.fromRGB(255, 255, 255) }
                 BackgroundTransparency={ 1 }
                 Visible={ true }

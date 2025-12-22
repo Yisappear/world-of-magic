@@ -111,7 +111,6 @@ export default function InventoryFrame(props: Props): React.Element {
                                 name: button.name,
                                 itemType: button.itemType,
                             }
-                            print(button.uuid)
                             Network.SelectItemEvent.Fire(itemData); 
                         } }
                     />

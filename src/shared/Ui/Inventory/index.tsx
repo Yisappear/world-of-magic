@@ -39,7 +39,7 @@ export default function App(props: Props): React.Element {
                 />
 
                 <VoidSelectFrame visible={ voidSelectFrameVisible } />
-                <WeaponSelectFrame visible={ selectFrameVisible } />
+                <WeaponSelectFrame visible={ selectFrameVisible } voidSelectFramVisible={ voidSelect } />
 
             </MainFrame>
         </screengui>

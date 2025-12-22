@@ -11,7 +11,7 @@ local function UnequipButton(props)
 		ClipsDescendants = false,
 		Text = "Unequip",
 		FontFace = Font.new("Ubuntu", Enum.FontWeight.Bold),
-		TextColor3 = Color3.fromRGB(0, 0, 0),
+		TextColor3 = Color3.fromRGB(255, 255, 255),
 		TextScaled = true,
 		Event = {
 			MouseButton1Click = function()

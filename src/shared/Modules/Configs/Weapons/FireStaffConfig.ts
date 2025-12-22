@@ -1,5 +1,7 @@
 import { ReplicatedStorage, Workspace } from "@rbxts/services";
 import { getCharacterFromPlayer } from "shared/Modules/Utils/Helper";
+import GameConfig from "../GameConfig";
+import { createNode } from "shared/Modules/Utils/Helper";
 
 // folders
 const Assets = ReplicatedStorage.WaitForChild("Assets") as Folder;
@@ -18,49 +20,74 @@ export default {
     icon: "",
 
     projectileModel: fireball,
-    projectileSpeed: 40,
+    projectileSpeed: 5,
 
-    getStartPosition: (player: Player): [Vector3, Vector3] => {
+    getPath: (player: Player): BasePart[] => {
+
         const playerCharacter = getCharacterFromPlayer(player);
         const playerHumanoidRootPart = playerCharacter.FindFirstChild("HumanoidRootPart") as BasePart;
-
-        const lookVector = playerHumanoidRootPart.CFrame.Rotation;
+        
         const position = playerHumanoidRootPart.Position;
-
-        const direction = lookVector.LookVector;
+        const lookVector = playerHumanoidRootPart.CFrame.LookVector;
         const right = playerHumanoidRootPart.CFrame.RightVector;
         const up = playerHumanoidRootPart.CFrame.UpVector;
 
-        const offset = 
-            position
-                .add(direction.mul(2))
-                .add(right.mul(2))
-                .add(up.mul(1))
+        const node1Position = position.add(lookVector.mul(2)).add(right.mul(2)).add(up.mul(1));
+        const node2Position = node1Position.add(lookVector.mul(15));
+        const node3Position = node2Position.add(lookVector.mul(5).add(up.mul(-4)));
 
-        return [offset, direction];
+        const node1 = createNode(node1Position) // start
+        const node2 = createNode(node2Position) // direct
+        const node3 = createNode(node3Position) // direct + down
+        
+        const nodes: BasePart[] = [
+            node1,
+            node2,
+            node3,
+        ];
+
+        print(nodes)
+
+        return nodes;
     },
 
-    getMovePosition: (
-        createTime: number,
-        speed: number,
-        startPosition: Vector3,
-        direction: Vector3
-    ): CFrame => {
+    moveAtPath: (distanceTraveled: number, nodes: BasePart[]): [boolean, CFrame] => {
 
-        const currentTime = Workspace.GetServerTimeNow();
-        const t = currentTime - createTime;
-        const distance = speed * t;
-        
-        let newVector = startPosition.add(direction.mul(distance));
-        let lookAt = direction;
-        let up = new Vector3(0, 1, 0)
+        let pDistance = 0;
+        for (let i = 2; i < nodes.size() + 1; i += 1) {
+            const p0 = nodes[i - 2].Position;
+            const p1 = nodes[i - 1].Position;
+            const newPDistance = pDistance + (p1.sub(p0)).Magnitude;
 
-        if ( t > 5 ) {
-            const downOffset = new Vector3(0, -1, 0);
-            lookAt = direction.mul(downOffset);
+            if ( newPDistance > distanceTraveled ) {
+                const alpha = math.map(distanceTraveled, pDistance, newPDistance, 0, 1);
+                return [false, CFrame.lookAlong(p0.Lerp(p1, alpha), p1.sub(p0))];
+            }
+
+            pDistance = newPDistance;
         }
 
-        return CFrame.lookAlong(newVector, lookAt, up);
+        const p0 = nodes[nodes.size() - 2].Position;
+        const p1 = nodes[nodes.size() - 1].Position;
+        return [true, CFrame.lookAlong(p1, p1.sub(p0))];
+    },
+
+    touchedEffect: (otherPart: Instance): [boolean, EnemyData | undefined] => {
+        
+
+        // explosion
+
+
+        const enemyHumanoid = otherPart.FindFirstChild("Humanoid") as Humanoid;
+        if ( enemyHumanoid === undefined ) return [false, undefined];
+
+        const enemyArmore = otherPart.GetAttribute(GameConfig.ARMORE_ATTRIBUTE) as number ?? 0;
+
+        const data: EnemyData = {
+            humanoid: enemyHumanoid,
+            armore: enemyArmore,
+        }
+        return [true, data]
     },
 
 }

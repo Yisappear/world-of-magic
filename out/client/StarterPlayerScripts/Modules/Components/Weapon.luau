@@ -13,22 +13,13 @@ local function onEquip()
 		Network.AttackEvent:FireServer()
 	end
 	-- bind CAS
-	ContextActionService:BindAction("Attack", onClick, false, Enum.UserInputType.MouseButton1)
+	ContextActionService:BindAction("Attack", onClick, false, Enum.UserInputType.MouseButton1, Enum.UserInputType.Touch)
 end
 local function onUnequip()
 	-- unbind CAS
 	ContextActionService:UnbindAction("Attack")
 end
---TEST
-onEquip()
-task.wait(10)
-print(`Unbind attack test`)
-onUnequip()
 -- setup
-Network.EquipWeaponEvent.OnClientEvent:Connect(function(args)
-	return onEquip()
-end)
-Network.UnequipWeaponEvent.OnClientEvent:Connect(function(args)
-	return onUnequip()
-end)
+Network.EquipWeaponEvent.OnClientEvent:Connect(onEquip)
+Network.UnequipWeaponEvent.OnClientEvent:Connect(onUnequip)
 return nil

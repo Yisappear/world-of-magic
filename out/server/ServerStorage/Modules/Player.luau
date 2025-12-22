@@ -3,56 +3,11 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local Players = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").Players
 local ProfileStore = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "profile-store", "src")
 local GameConfig = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Configs", "GameConfig").default
-local Network = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Network").default
+local loadData = TS.import(script, game:GetService("ServerStorage"), "Modules", "Utils", "DataHelper").loadData
 -- constants
 local PlayerStore = ProfileStore.New(GameConfig.DATA_NAME, GameConfig.DATA_TEMPLATE)
 local Profiles = {}
 -- private functions
--- profile-store
-local function loadProfile(player)
-	local _userId = player.UserId
-	local profile = Profiles[_userId]
-	if profile == nil then
-		player:Kick(`Profile load fail - Please rejoin`)
-		return nil
-	end
-	-- leaderstats
-	local leaderstats = player:FindFirstChild("leaderstats")
-	local cash = leaderstats:FindFirstChild("Cash")
-	cash.Value = profile.Data.cash
-	local item = {
-		name = GameConfig.FIRE_STAFF,
-		itemType = "Weapon",
-		equipped = false,
-	}
-	local armore = {
-		name = GameConfig.FIRE_STAFF,
-		itemType = "Armore",
-		armoreType = "Hat",
-		equipped = false,
-	}
-	task.wait(7)
-	Network.GiveItemEvent:Fire(player, item)
-	Network.GiveItemEvent:Fire(player, item)
-	Network.GiveItemEvent:Fire(player, armore)
-	Network.GiveItemEvent:Fire(player, armore)
-	Network.GiveItemEvent:Fire(player, armore)
-	Network.GiveItemEvent:Fire(player, armore)
-	Network.GiveItemEvent:Fire(player, armore)
-	Network.GiveItemEvent:Fire(player, armore)
-end
-local function useLoader(player)
-	-- leaderstats
-	local leaderstats = Instance.new("Folder")
-	leaderstats.Name = "leaderstats"
-	local Cash = Instance.new("NumberValue")
-	Cash.Name = "Cash"
-	Cash.Value = 0
-	leaderstats.Parent = player
-	Cash.Parent = leaderstats
-	task.wait(1)
-	loadProfile(player)
-end
 local function onPlayerAdded(player)
 	-- start session?
 	local key = `User_` .. tostring(player.UserId)
@@ -78,9 +33,11 @@ local function onPlayerAdded(player)
 	else
 		player:Kick(`Profile load fail - Please rejoin`)
 	end
-	useLoader(player)
+	loadData(player, profile)
+	-- DEBUG
+	-- profile.Data.inventory = new Map();
 end
--- export functions
+-- export
 local function getProfile(player)
 	local _userId = player.UserId
 	return Profiles[_userId]

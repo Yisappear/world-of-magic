@@ -50,8 +50,8 @@ export default {
             EquipItemEvent: getEvent("EquipItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
             UnequipItemEvent: getEvent("UnequipItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
             SelectItemEvent: getEvent("SelectItem", InventoryEvents, "BindableEvent") as BindableEvent,
-            CloseInventoryEvent: getEvent("CloseInventory", InventoryEvents, "BindableEvent") as BindableEvent,
             IsEquipped: getEvent("IsEquipped", InventoryEvents, "RemoteFunction") as RemoteFunction,
+            CloseInventoryEvent: getEvent("CloseInventory", InventoryEvents, "BindableEvent") as BindableEvent,
 
             // Weapon
                 EquipWeaponEvent: getEvent("EquipWeapon", InventoryEvents, "RemoteEvent") as RemoteEvent,

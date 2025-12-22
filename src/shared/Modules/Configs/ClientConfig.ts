@@ -11,7 +11,7 @@ export default {
     PLAYER_SCRIPTS: player.FindFirstChild("PlayerScripts"),
 
     GET_CHARACTER: () => {
-        return player.Character ?? player.CharacterAdded.Wait()[0] 
-    }
+        return player.Character ?? player.CharacterAdded.Wait()[0];
+    },
 
 }

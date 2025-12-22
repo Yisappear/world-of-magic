@@ -6,8 +6,9 @@ interface WeaponConfig {
     icon: string,
     projectileModel: BasePart | MeshPart,
     projectileSpeed: number,
-    getStartPosition: (player: Player) => [Vector3, Vector3],
-    getMovePosition: (createTime: number, speed: number, startPosition: Vector3, direction: Vector3) => CFrame,
+    getPath: (player: Player) => BasePart[],
+    moveAtPath: (distanceTraveled: number, nodes: BasePart[]) => [boolean, CFrame],
+    touchedEffect: (otherPart: Instance) => [boolean, EnemyData],
 }
 
 interface ProjectileData {
@@ -16,6 +17,10 @@ interface ProjectileData {
     createTime: number,
     model: BasePart,
     speed: number,
-    startPosition: Vector3,
-    direction: Vector3,
+    nodes: BasePart[],
+}
+
+interface EnemyData {
+    humanoid: Humanoid,
+    armore: number,
 }

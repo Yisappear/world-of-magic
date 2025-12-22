@@ -43,6 +43,7 @@ local function App(props)
 		visible = voidSelectFrameVisible,
 	}), React.createElement(WeaponSelectFrame, {
 		visible = selectFrameVisible,
+		voidSelectFramVisible = voidSelect,
 	})))
 end
 return {

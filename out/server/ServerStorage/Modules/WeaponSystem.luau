@@ -4,7 +4,6 @@ local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts
 local RunService = _services.RunService
 local Workspace = _services.Workspace
 local ReplicatedStorage = _services.ReplicatedStorage
-local Players = _services.Players
 local GameConfig = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Configs", "GameConfig").default
 local Network = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Network").default
 local getCharacterFromPlayer = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Utils", "Helper").getCharacterFromPlayer
@@ -15,12 +14,10 @@ local WeaponConfigs = Configs:FindFirstChild("Weapons")
 -- constants
 local projectiles = {}
 -- private functions
-local function notification()
-	Network.RenderEvent:FireAllClients()
-end
-local function rewardPerKill(player)
-end
-local function isDamageAndKill(enemyHumanoid, enemyArmore, weaponDamage)
+local function isDamageKill(enemyHumanoid, enemyArmore, weaponDamage)
+	if enemyHumanoid.Health == 0 then
+		return false
+	end
 	local isDamage = false
 	local isKill = false
 	local currentHealth = enemyHumanoid.Health
@@ -30,16 +27,16 @@ local function isDamageAndKill(enemyHumanoid, enemyArmore, weaponDamage)
 	isDamage = true
 	if newHealth == 0 then
 		isKill = true
-		return { isDamage, isKill }
+		return isKill
 	end
-	return { isDamage, isKill }
+	return isKill
 end
-local function cleanup(model)
+local function cleanup(createTime)
 	for _, object in projectiles do
-		if object.model == model then
+		if object.createTime == createTime then
 			-- ▼ ReadonlyArray.findIndex ▼
 			local _callback = function(obj)
-				return obj.model == model
+				return obj.createTime == createTime
 			end
 			local _result = -1
 			for _i, _v in projectiles do
@@ -55,12 +52,14 @@ local function cleanup(model)
 		end
 	end
 end
-local function getServerProjectile(projectile)
+local function getHitbox(projectile)
 	local part = Instance.new("Part")
 	part.Parent = Workspace
 	part.Size = projectile.Size
 	part.CanCollide = false
 	part.Transparency = 0.5
+	part.Color = Color3.new(170, 0, 0)
+	part.Anchored = true
 	return part
 end
 local function onAttack(player)
@@ -70,80 +69,59 @@ local function onAttack(player)
 		_condition = GameConfig.FIRE_STAFF
 	end
 	local weaponName = _condition
-	local configName = `{weaponName}` .. "Config"
-	local configModule = require(WeaponConfigs:FindFirstChild(configName))
+	local configModule = require(WeaponConfigs:FindFirstChild(`{weaponName}` .. "Config"))
 	local config = configModule.default
+	if configModule == nil or config == nil then
+		return nil
+	end
 	-- cooldown
 	local _condition_1 = player:GetAttribute(GameConfig.COOLDOWN)
 	if _condition_1 == nil then
 		_condition_1 = 0
 	end
 	local cooldown = _condition_1
-	local _condition_2 = player:GetAttribute(GameConfig.LAST_WEAPON)
-	if _condition_2 == nil then
-		_condition_2 = GameConfig.FIRE_STAFF
-	end
-	local lastWeapon = _condition_2
+	local lastWeapon = player:GetAttribute(GameConfig.LAST_WEAPON)
 	if (createTime - cooldown) < config.cooldown and lastWeapon == weaponName then
 		return nil
 	end
 	player:SetAttribute(GameConfig.COOLDOWN, createTime)
 	player:SetAttribute(GameConfig.LAST_WEAPON, weaponName)
-	local model = getServerProjectile(config.projectileModel)
-	local _binding = config.getStartPosition(player)
-	local position = _binding[1]
-	local lookVector = _binding[2]
-	local startPosition = position
-	local direction = lookVector
-	local playerCharacter = getCharacterFromPlayer(player)
+	-- create hitbox
+	local model = getHitbox(config.projectileModel)
+	local nodes = config.getPath(player)
 	local _arg0 = {
 		config = config,
 		owner = player,
 		createTime = createTime,
 		model = model,
 		speed = config.projectileSpeed,
-		startPosition = startPosition,
-		direction = direction,
+		nodes = nodes,
 	}
 	table.insert(projectiles, _arg0)
-	model:SetAttribute(GameConfig.CAN_HIT, true)
-	model.Touched:Connect(function(otherPart)
-		if otherPart.Parent == playerCharacter or model.Name == otherPart.Name or model:GetAttribute(GameConfig.CAN_HIT) == false then
+	-- touched event
+	local playerCharacter = getCharacterFromPlayer(player)
+	local isTouched = false
+	local connection
+	connection = model.Touched:Connect(function(otherPart)
+		if otherPart.Parent == playerCharacter or otherPart.Parent == nil then
 			return nil
 		end
-		model:SetAttribute(GameConfig.CAN_HIT, false)
-		cleanup(model)
-		local enemyCharacter = otherPart.Parent
-		local _result = enemyCharacter
-		if _result ~= nil then
-			_result = _result:FindFirstChild("Humanoid")
-		end
-		local enemyHumanoid = _result
-		local enemyPlayer = Players:GetPlayerFromCharacter(enemyCharacter)
-		local enemyArmore = 0
-		if enemyHumanoid == nil then
-			return nil
-		end
-		if enemyPlayer ~= nil then
-			local _condition_3 = enemyPlayer:GetAttribute(GameConfig.ARMORE_ATTRIBUTE)
-			if _condition_3 == nil then
-				_condition_3 = 0
-			end
-			enemyArmore = _condition_3
-		end
-		task.spawn(function()
-			local _binding_1 = isDamageAndKill(enemyHumanoid, enemyArmore, config.damage)
-			local isDamage = _binding_1[1]
-			local isKill = _binding_1[2]
-			if isDamage == false then
-				warn(`isDamage, got false`)
-			end
+		isTouched = true
+		cleanup(createTime)
+		local _binding = config.touchedEffect(otherPart.Parent)
+		local isDamage = _binding[1]
+		local enemyData = _binding[2]
+		if isDamage == true then
+			local isKill = isDamageKill(enemyData.humanoid, enemyData.armore, config.damage)
 			if isKill == true then
-				rewardPerKill(player)
+				task.spawn(function()
+					-- reward
+				end)
 			end
-		end)
+		end
+		connection:Disconnect()
 	end)
-	notification()
+	-- client render
 end
 -- setup
 RunService.Stepped:Connect(function()
@@ -155,7 +133,15 @@ RunService.Stepped:Connect(function()
 			return nil
 		end
 		if object.model.Parent ~= nil then
-			local cf = object.config.getMovePosition(object.createTime, object.speed, object.startPosition, object.direction)
+			local t = Workspace:GetServerTimeNow()
+			local distanceTraveled = (t - object.createTime) * object.speed
+			local _binding = object.config.moveAtPath(distanceTraveled, object.nodes)
+			local finished = _binding[1]
+			local cf = _binding[2]
+			if finished == true then
+				cleanup(object.createTime)
+				object.config.touchedEffect(object.model)
+			end
 			local _model = object.model
 			table.insert(p, _model)
 			table.insert(cfs, cf)
@@ -166,7 +152,5 @@ RunService.Stepped:Connect(function()
 	end
 	Workspace:BulkMoveTo(p, cfs, Enum.BulkMoveMode.FireCFrameChanged)
 end)
-Network.AttackEvent.OnServerEvent:Connect(function(player, args)
-	return onAttack(player)
-end)
+Network.AttackEvent.OnServerEvent:Connect(onAttack)
 return nil

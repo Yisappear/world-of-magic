@@ -1,4 +1,4 @@
-import { ContextActionService, RunService } from "@rbxts/services";
+import { ContextActionService } from "@rbxts/services";
 import Network from "shared/Modules/Network";
 
 function onEquip(): void {
@@ -6,6 +6,7 @@ function onEquip(): void {
     let lastClick = 0;
 
     function onClick(actionName: string, state: Enum.UserInputState, inputObject: InputObject) {
+        
         const t = os.clock();
         if ( (t - lastClick) < 0.5 ) return; // anti double click
         lastClick = t;
@@ -14,7 +15,7 @@ function onEquip(): void {
     }
 
     // bind CAS
-    ContextActionService.BindAction("Attack", onClick, false, Enum.UserInputType.MouseButton1);
+    ContextActionService.BindAction("Attack", onClick, false, Enum.UserInputType.MouseButton1, Enum.UserInputType.Touch);
 }
 
 function onUnequip(): void {
@@ -23,5 +24,5 @@ function onUnequip(): void {
 }
 
 // setup
-Network.EquipWeaponEvent.OnClientEvent.Connect(args => onEquip());
-Network.UnequipWeaponEvent.OnClientEvent.Connect(args => onUnequip());
+Network.EquipWeaponEvent.OnClientEvent.Connect(onEquip);
+Network.UnequipWeaponEvent.OnClientEvent.Connect(onUnequip);

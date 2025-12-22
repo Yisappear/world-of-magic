@@ -3,11 +3,10 @@ import EquipButton from "../Buttons/equip-button";
 import SellButton from "../Buttons/sell-button";
 import UnequipButton from "../Buttons/unequip-button";
 import Network from "shared/Modules/Network";
-import VoidSelectFrame from "./voidselect-frame";
 
 interface Props {
     visible: boolean
-    voidSelectFramVisible: (bool: boolean) => void,
+    voidSelectFramVisible: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export default function WeaponSelectFrame(props: Props): React.Element {
@@ -28,12 +27,12 @@ export default function WeaponSelectFrame(props: Props): React.Element {
     React.useEffect(() => {
 
         Network.SelectItemEvent.Event.Connect((args: ItemData) => {
-            props.voidSelectFramVisible(false);
-            selectFrame(true)
             if ( args === undefined ) return;
             const data = args as ItemData;
             dataRef.current = data;
 
+            props.voidSelectFramVisible(false);
+            selectFrame(true)
             equipButton(true);
 
             const equipped = Network.IsEquipped.InvokeServer(data.uuid) as boolean;
@@ -70,8 +69,24 @@ export default function WeaponSelectFrame(props: Props): React.Element {
                 ClipsDescendants={ false }
             >
 
-                <EquipButton onClick={ () => { Network.EquipItemEvent.FireServer(dataRef.current);} } visible={ equipVision } />
-                <UnequipButton onClick={ () => { Network.UnequipItemEvent.FireServer(dataRef.current); } } visible={ !equipVision } />
+                <EquipButton onClick={ () => { 
+                    Network.EquipItemEvent.FireServer(dataRef.current);
+                    const equipped = Network.IsEquipped.InvokeServer(dataRef.current.uuid) as boolean;
+                    if ( equipped === true ) {
+                        equipButton(false);
+                    }
+                } }
+                visible={ equipVision } 
+                />
+                <UnequipButton onClick={ () => {
+                    Network.UnequipItemEvent.FireServer(dataRef.current);
+                    const equipped = Network.IsEquipped.InvokeServer(dataRef.current.uuid) as boolean;
+                    if ( equipped === false ) {
+                        equipButton(true);
+                    }
+                } }
+                visible={ !equipVision }
+                />
                 <SellButton onClick={ () => { Network.DelItemEvent.FireServer(dataRef.current); } } visible={ true } />
 
             </frame>

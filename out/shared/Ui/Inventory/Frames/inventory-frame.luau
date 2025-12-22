@@ -130,7 +130,6 @@ local function InventoryFrame(props)
 					name = button.name,
 					itemType = button.itemType,
 				}
-				print(button.uuid)
 				Network.SelectItemEvent:Fire(itemData)
 			end,
 		})
