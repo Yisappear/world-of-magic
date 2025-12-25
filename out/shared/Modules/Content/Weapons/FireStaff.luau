@@ -12,15 +12,19 @@ local WeaponAssets = Assets:FindFirstChild("WeaponAssets")
 -- constants
 local fireStaff = WeaponAssets:FindFirstChild("FireStaff")
 local fireball = WeaponAssets:FindFirstChild("Fireball")
+local meteorite = WeaponAssets:FindFirstChild("Meteorite")
 local default = {
 	model = fireStaff,
 	damage = 20,
 	cooldown = 1.5,
 	animation = "",
 	icon = "",
+	rewardMult = 1,
 	projectileModel = fireball,
 	projectileSpeed = 21,
-	rewardMult = 1,
+	abilityZModel = meteorite,
+	abilityZSpeed = 11,
+	abilityZcantouch = {},
 	getPathAttack = function(player)
 		local playerCharacter = getCharacterFromPlayer(player)
 		local playerHumanoidRootPart = playerCharacter:FindFirstChild("HumanoidRootPart")
@@ -52,7 +56,7 @@ local default = {
 		hitbox.Size = Vector3.new(4, 4, 4)
 		hitbox.Position = otherPart.Position
 		hitbox.Color = Color3.fromRGB(170, 0, 0)
-		hitbox.Transparency = 0.8
+		hitbox.Transparency = 0.77
 		hitbox.Anchored = true
 		hitbox.CanCollide = false
 		hitbox.CanTouch = false
@@ -88,6 +92,55 @@ local default = {
 		-- hitbox.Destroy();
 		return { false, nil }
 	end,
+	abilityZ = function(owner)
+		-- metorite auto-target
+		-- todo cooldown
+		-- check mana
+		local ownerCharacter = getCharacterFromPlayer(owner)
+		local ownerPosition = (ownerCharacter:FindFirstChild("HumanoidRootPart")).CFrame.Position
+		-- find enemy
+		local findPart = Instance.new("Part")
+		findPart.Parent = Workspace
+		findPart.Position = ownerPosition
+		findPart.Size = Vector3.new(30, 30, 30)
+		findPart.Color = Color3.fromRGB(0, 200, 0)
+		findPart.Transparency = 0.8
+		findPart.Anchored = true
+		findPart.CanCollide = false
+		findPart.CanTouch = false
+		local overlapParams = OverlapParams.new()
+		overlapParams.FilterType = Enum.RaycastFilterType.Exclude
+		overlapParams.FilterDescendantsInstances = { ownerCharacter }
+		local distance = 999
+		local enemyPosition
+		local parts = Workspace:GetPartsInPart(findPart, overlapParams)
+		for _, part in parts do
+			local parent = part.Parent
+			local _humanoid = parent
+			if _humanoid ~= nil then
+				_humanoid = _humanoid:FindFirstChild("Humanoid")
+			end
+			local humanoid = _humanoid
+			if parent ~= nil and humanoid ~= nil and parent ~= ownerCharacter then
+				local enemyPos = (parent:FindFirstChild("HumanoidRootPart")).CFrame.Position
+				local magnitude = (ownerPosition - enemyPos).Magnitude
+				if magnitude < distance then
+					distance = magnitude
+					enemyPosition = enemyPos
+				end
+			end
+		end
+		task.delay(3, function()
+			findPart:Destroy()
+		end)
+		if distance == 999 or enemyPosition == nil then
+			return { false, {} }
+		end
+		--  nodes
+		local nodes = { createNode(Vector3.new(enemyPosition.X, 30, enemyPosition.Z)), createNode(Vector3.new(enemyPosition.X, -10, enemyPosition.Z)) }
+		return { true, nodes }
+	end,
+	abilityX = function() end,
 }
 return {
 	default = default,

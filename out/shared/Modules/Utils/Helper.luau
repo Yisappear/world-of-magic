@@ -2,6 +2,9 @@
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local Workspace = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").Workspace
 local function getCharacterFromPlayer(player)
+	if player == nil then
+		error("why u call this function without player parametr")
+	end
 	return player.Character or (player.CharacterAdded:Wait())
 end
 local function createNode(pos)

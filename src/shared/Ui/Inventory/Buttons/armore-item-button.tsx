@@ -14,8 +14,6 @@ export default function ArmoreItemButton(props: Props): React.Element {
         const button = ref.current;
         if ( button === undefined ) return;
 
-        print('qq')
-
         const connection = button.GetPropertyChangedSignal("AbsoluteSize").Connect(() => {
             Network.UpdateWeaponFrameEvent.Fire(button.AbsoluteSize)
         });

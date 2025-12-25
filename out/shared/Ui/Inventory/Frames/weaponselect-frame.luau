@@ -60,6 +60,7 @@ local function WeaponSelectFrame(props)
 		onClick = function()
 			Network.EquipItemEvent:FireServer(dataRef.current)
 			local equipped = Network.IsEquipped:InvokeServer(dataRef.current.uuid)
+			warn(equipped)
 			if equipped == true then
 				equipButton(false)
 			end
@@ -69,6 +70,7 @@ local function WeaponSelectFrame(props)
 		onClick = function()
 			Network.UnequipItemEvent:FireServer(dataRef.current)
 			local equipped = Network.IsEquipped:InvokeServer(dataRef.current.uuid)
+			warn(equipped)
 			if equipped == false then
 				equipButton(true)
 			end

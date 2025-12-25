@@ -1,6 +1,7 @@
 import { Workspace } from "@rbxts/services";
 
 export function getCharacterFromPlayer(player: Player) {
+    if ( player === undefined ) throw"why u call this function without player parametr"
     return player.Character ?? player.CharacterAdded.Wait()[0];
 }
 

@@ -10,6 +10,7 @@ const WeaponAssets = Assets.FindFirstChild("WeaponAssets") as Folder;
 // constants
 const fireStaff = WeaponAssets.FindFirstChild("FireStaff") as BasePart;
 const fireball = WeaponAssets.FindFirstChild("Fireball") as BasePart;
+const meteorite = WeaponAssets.FindFirstChild("Meteorite") as BasePart;
 
 export default {
 
@@ -19,10 +20,17 @@ export default {
     animation: "",
     icon: "",
 
+    rewardMult: 1,
+
     projectileModel: fireball,
     projectileSpeed: 21,
 
-    rewardMult: 1,
+    abilityZModel: meteorite,
+    abilityZSpeed: 11,
+    abilityZcantouch: {
+        // whats can touched
+    },
+
 
     getPathAttack: (player: Player): BasePart[] => {
 
@@ -58,7 +66,7 @@ export default {
         hitbox.Size = new Vector3(4, 4, 4);
         hitbox.Position = otherPart.Position
         hitbox.Color = Color3.fromRGB(170, 0, 0);
-        hitbox.Transparency = 0.8
+        hitbox.Transparency = 0.77
         hitbox.Anchored = true;
         hitbox.CanCollide = false;
         hitbox.CanTouch = false;
@@ -93,6 +101,67 @@ export default {
         
         // hitbox.Destroy();
         return [false, undefined];
+    },
+
+    abilityZ: (owner: Player): [boolean, BasePart[]] => {
+        // metorite auto-target
+
+        // todo cooldown
+        // check mana
+
+
+        const ownerCharacter = getCharacterFromPlayer(owner);
+        const ownerPosition = (ownerCharacter.FindFirstChild("HumanoidRootPart") as BasePart).CFrame.Position;
+
+        // find enemy
+        const findPart = new Instance("Part");
+        findPart.Parent = Workspace;
+        findPart.Position = ownerPosition;
+        findPart.Size = new Vector3(30, 30, 30);
+        findPart.Color = Color3.fromRGB(0, 200, 0);
+        findPart.Transparency = 0.8;
+        findPart.Anchored = true;
+        findPart.CanCollide = false;
+        findPart.CanTouch = false;
+
+        const overlapParams = new OverlapParams();
+        overlapParams.FilterType = Enum.RaycastFilterType.Exclude;
+        overlapParams.FilterDescendantsInstances = [ ownerCharacter,  ]
+
+        
+        let distance = 999;
+        let enemyPosition!: Vector3;
+        
+        const parts = Workspace.GetPartsInPart(findPart, overlapParams);
+        for (const part of parts) {
+            const parent = part.Parent;
+            const humanoid = parent?.FindFirstChild("Humanoid");
+            if ( parent !== undefined && humanoid !== undefined && parent !== ownerCharacter) {
+                const enemyPos = (parent.FindFirstChild("HumanoidRootPart") as BasePart).CFrame.Position;
+
+                const magnitude = (ownerPosition.sub(enemyPos)).Magnitude;
+                if ( magnitude < distance ) {
+                    distance = magnitude;
+                    enemyPosition = enemyPos;
+                }
+            };
+        }
+        task.delay(3, () => { findPart.Destroy() });
+        if ( distance === 999 || enemyPosition === undefined ) return [false, []];
+
+
+
+        //  nodes
+        const nodes: BasePart[] = [
+            createNode(new Vector3(enemyPosition.X, 30, enemyPosition.Z)), // start pos
+            createNode(new Vector3(enemyPosition.X, -10, enemyPosition.Z)), // last pos
+        ];
+        
+        return [true, nodes]; // true - yes move with nodes and connet touched
+    },
+
+    abilityX: () => {
+
     },
 
 }

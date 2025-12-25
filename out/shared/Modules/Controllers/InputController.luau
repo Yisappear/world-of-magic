@@ -13,12 +13,22 @@ local function onEquipWeapon()
 		lastClick = t
 		Network.AttackEvent:FireServer()
 	end
+	local function onAbilityZ(actionName, state, inputObject)
+		Network.AbilityEvent:FireServer("Z")
+	end
+	local function onAbilityX(actionName, state, inputObject)
+		Network.AbilityEvent:FireServer("X")
+	end
 	-- bind CAS
 	ContextActionService:BindAction("Attack", onClick, false, Enum.UserInputType.MouseButton1, Enum.UserInputType.Touch)
+	ContextActionService:BindAction("AbilityZ", onAbilityZ, false, Enum.KeyCode.Z)
+	ContextActionService:BindAction("AbilityX", onAbilityX, false, Enum.KeyCode.X)
 end
 local function onUnequipWeapon()
 	-- unbind CAS
 	ContextActionService:UnbindAction("Attack")
+	ContextActionService:UnbindAction("AbilityZ")
+	ContextActionService:UnbindAction("AbilityX")
 end
 -- setup
 Network.WeaponEquipEvent.OnClientEvent:Connect(onEquipWeapon)

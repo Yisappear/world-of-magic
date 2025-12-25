@@ -4,11 +4,14 @@ interface WeaponConfig {
     cooldown: number,
     animation: string,
     icon: string,
+    rewardMult: number,
     projectileModel: BasePart | MeshPart,
     projectileSpeed: number,
-    rewardMult: number,
+    abilityZModel: BasePart | MeshPart,
+    abilityZSpeed: number,
     getPathAttack: (player: Player) => BasePart[],
-    touchedEffectAttack: (otherPart: Instance) => [boolean, EnemyData],
+    touchedEffectAttack: (otherPart: Instance, owner: Player) => [boolean, EnemyData],
+    abilityZ: (owner: Player) => [boolean, BasePart[]];
 }
 
 interface ProjectileData {

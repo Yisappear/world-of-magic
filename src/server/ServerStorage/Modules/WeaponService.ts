@@ -74,6 +74,68 @@ function getPositionAtPath(nodes: BasePart[], distanceTraveled: number): [boolea
     return [true, CFrame.lookAlong(p1, p1.sub(p0))];
 }
 
+function onAbility(player: Player, abilityKey: "Z" | "X") {
+
+    const createTime = Workspace.GetServerTimeNow();
+    
+    const weaponName = player.GetAttribute(GameConfig.WEAPON_ATTRIBUTE) as string;
+    if ( weaponName === undefined ) return;
+
+    const configModule = require(Weapons.FindFirstChild(weaponName) as ModuleScript) as { default: WeaponConfig };
+    const config = configModule.default as WeaponConfig;
+    if ( configModule === undefined || config === undefined ) return;
+
+    const model = new Instance("Part");
+    model.Parent = Workspace;
+    model.Position = Vector3.one;
+    model.Size = config.abilityZModel.Size;
+    model.CanCollide = false;
+    model.Transparency = 0.5;
+    model.Color = new Color3(170, 0, 0);
+    model.Anchored = true;
+
+    const speed = config.abilityZSpeed;
+
+    let nodes!: BasePart[];
+
+    if ( abilityKey === "Z" ) {
+        const [hasMove, path] = config.abilityZ(player);
+        if ( hasMove === false ) return;
+        nodes = path;
+    }
+    
+    if ( nodes === undefined ) {
+        model.Destroy();
+    };
+
+    projectiles.push({
+        config: config,
+        owner: player,
+        createTime: createTime,
+        model: model,
+        speed: speed,
+        nodes: nodes,
+    })
+
+    // const playerCharacter: Model = getCharacterFromPlayer(player);
+    // let isTouched: boolean = false;
+    // const connection = model.Touched.Connect(otherPart => {
+    //     if ( isTouched === true || otherPart.Parent === playerCharacter  || otherPart.Parent === undefined ) return;
+
+    //     isTouched = true;
+    //     cleanup(createTime, nodes);
+
+    //     const [isDamage, enemyData] = config.touchedEffectAttack(otherPart, player);
+    //     if ( isDamage === true ) {
+
+    //         damage(enemyData, player, config);
+    //     }
+        
+    //     connection.Disconnect();
+    // })
+
+}
+
 function onAttack(player: Player): void {
 
     const createTime = Workspace.GetServerTimeNow();
@@ -95,7 +157,7 @@ function onAttack(player: Player): void {
 
     const model = new Instance("Part");
     model.Parent = Workspace;
-    model.Size = config.model.Size;
+    model.Size = config.projectileModel.Size;
     model.CanCollide = false;
     model.Transparency = 0.5;
     model.Color = new Color3(170, 0, 0);
@@ -120,7 +182,7 @@ function onAttack(player: Player): void {
         isTouched = true;
         cleanup(createTime, nodes);
 
-        const [isDamage, enemyData] = config.touchedEffectAttack(otherPart);
+        const [isDamage, enemyData] = config.touchedEffectAttack(otherPart, player);
         if ( isDamage === true ) {
 
             damage(enemyData, player, config);
@@ -153,7 +215,7 @@ RunService.Stepped.Connect(() => {
 
             if ( finished === true ) {
                 cleanup(object.createTime, object.nodes);
-                object.config.touchedEffectAttack(object.model);
+                object.config.touchedEffectAttack(object.model, object.owner);
             }
 
             p.push(object.model);
@@ -166,3 +228,9 @@ RunService.Stepped.Connect(() => {
 });
 
 Network.AttackEvent.OnServerEvent.Connect(onAttack);
+Network.AbilityEvent.OnServerEvent.Connect((player, args) => {
+    if ( args === undefined ) return;
+
+    const key = args as "Z" | "X";
+    onAbility(player, key);
+})

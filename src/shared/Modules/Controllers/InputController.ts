@@ -15,13 +15,24 @@ function onEquipWeapon(): void {
         Network.AttackEvent.FireServer();
     }
 
+    function onAbilityZ(actionName: string, state: Enum.UserInputState, inputObject: InputObject) {
+        Network.AbilityEvent.FireServer("Z")
+    }
+    function onAbilityX(actionName: string, state: Enum.UserInputState, inputObject: InputObject) {
+        Network.AbilityEvent.FireServer("X")
+    }
+
     // bind CAS
     ContextActionService.BindAction("Attack", onClick, false, Enum.UserInputType.MouseButton1, Enum.UserInputType.Touch);
+    ContextActionService.BindAction("AbilityZ", onAbilityZ, false, Enum.KeyCode.Z);
+    ContextActionService.BindAction("AbilityX", onAbilityX, false, Enum.KeyCode.X);
 }
 
 function onUnequipWeapon(): void {
     // unbind CAS
     ContextActionService.UnbindAction("Attack");
+    ContextActionService.UnbindAction("AbilityZ");
+    ContextActionService.UnbindAction("AbilityX");
 }
 
 // setup

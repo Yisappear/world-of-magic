@@ -35,6 +35,7 @@ end
 -- setup
 local default = {
 	AttackEvent = getEvent("Attack", WeaponEvents, "RemoteEvent"),
+	AbilityEvent = getEvent("Ability", WeaponEvents, "RemoteEvent"),
 	RenderEvent = getEvent("Render", ProjectileEvents, "RemoteEvent"),
 	LoadInventoryEvent = getEvent("LoadInventory", InventoryEvents, "BindableEvent"),
 	GiveItemToPlayerEvent = getEvent("GiveItemToPlayer", InventoryEvents, "BindableEvent"),

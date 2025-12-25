@@ -9,20 +9,17 @@ world-of-magic
 
     todo:
         
+        - fireball nodes path // need studio
+        [X] staff abilitys
+            - add touched
+            - 
 
 
-        ToDay:
-            frontend:                
-        
-            backend:
-                
+        functtion Ability => return true, and nodes? if true then create in abilitys table?
+        1 event, w args -> "Z" or "X"
 
-
-
-
-
-
-
+        // ability idea if return true then we have nodes and can moved + touched if false then all
+        relese on da function
 
 
 

@@ -72,6 +72,9 @@ export default function WeaponSelectFrame(props: Props): React.Element {
                 <EquipButton onClick={ () => { 
                     Network.EquipItemEvent.FireServer(dataRef.current);
                     const equipped = Network.IsEquipped.InvokeServer(dataRef.current.uuid) as boolean;
+
+                    warn(equipped)
+
                     if ( equipped === true ) {
                         equipButton(false);
                     }
@@ -81,6 +84,9 @@ export default function WeaponSelectFrame(props: Props): React.Element {
                 <UnequipButton onClick={ () => {
                     Network.UnequipItemEvent.FireServer(dataRef.current);
                     const equipped = Network.IsEquipped.InvokeServer(dataRef.current.uuid) as boolean;
+
+                    warn(equipped)
+
                     if ( equipped === false ) {
                         equipButton(true);
                     }

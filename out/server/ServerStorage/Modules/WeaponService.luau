@@ -71,6 +71,61 @@ local function getPositionAtPath(nodes, distanceTraveled)
 	local p1 = nodes[#nodes].Position
 	return { true, CFrame.lookAlong(p1, p1 - p0) }
 end
+local function onAbility(player, abilityKey)
+	local createTime = Workspace:GetServerTimeNow()
+	local weaponName = player:GetAttribute(GameConfig.WEAPON_ATTRIBUTE)
+	if weaponName == nil then
+		return nil
+	end
+	local configModule = require(Weapons:FindFirstChild(weaponName))
+	local config = configModule.default
+	if configModule == nil or config == nil then
+		return nil
+	end
+	local model = Instance.new("Part")
+	model.Parent = Workspace
+	model.Position = Vector3.one
+	model.Size = config.abilityZModel.Size
+	model.CanCollide = false
+	model.Transparency = 0.5
+	model.Color = Color3.new(170, 0, 0)
+	model.Anchored = true
+	local speed = config.abilityZSpeed
+	local nodes
+	if abilityKey == "Z" then
+		local _binding = config.abilityZ(player)
+		local hasMove = _binding[1]
+		local path = _binding[2]
+		if hasMove == false then
+			return nil
+		end
+		nodes = path
+	end
+	if nodes == nil then
+		model:Destroy()
+	end
+	local _arg0 = {
+		config = config,
+		owner = player,
+		createTime = createTime,
+		model = model,
+		speed = speed,
+		nodes = nodes,
+	}
+	table.insert(projectiles, _arg0)
+	-- const playerCharacter: Model = getCharacterFromPlayer(player);
+	-- let isTouched: boolean = false;
+	-- const connection = model.Touched.Connect(otherPart => {
+	--     if ( isTouched === true || otherPart.Parent === playerCharacter  || otherPart.Parent === undefined ) return;
+	--     isTouched = true;
+	--     cleanup(createTime, nodes);
+	--     const [isDamage, enemyData] = config.touchedEffectAttack(otherPart, player);
+	--     if ( isDamage === true ) {
+	--         damage(enemyData, player, config);
+	--     }
+	--     connection.Disconnect();
+	-- })
+end
 local function onAttack(player)
 	local createTime = Workspace:GetServerTimeNow()
 	local weaponName = player:GetAttribute(GameConfig.WEAPON_ATTRIBUTE)
@@ -96,7 +151,7 @@ local function onAttack(player)
 	player:SetAttribute(GameConfig.LAST_WEAPON, weaponName)
 	local model = Instance.new("Part")
 	model.Parent = Workspace
-	model.Size = config.model.Size
+	model.Size = config.projectileModel.Size
 	model.CanCollide = false
 	model.Transparency = 0.5
 	model.Color = Color3.new(170, 0, 0)
@@ -121,7 +176,7 @@ local function onAttack(player)
 		end
 		isTouched = true
 		cleanup(createTime, nodes)
-		local _binding = config.touchedEffectAttack(otherPart)
+		local _binding = config.touchedEffectAttack(otherPart, player)
 		local isDamage = _binding[1]
 		local enemyData = _binding[2]
 		if isDamage == true then
@@ -148,7 +203,7 @@ RunService.Stepped:Connect(function()
 			local cf = _binding[2]
 			if finished == true then
 				cleanup(object.createTime, object.nodes)
-				object.config.touchedEffectAttack(object.model)
+				object.config.touchedEffectAttack(object.model, object.owner)
 			end
 			local _model = object.model
 			table.insert(p, _model)
@@ -161,4 +216,11 @@ RunService.Stepped:Connect(function()
 	Workspace:BulkMoveTo(p, cfs, Enum.BulkMoveMode.FireCFrameChanged)
 end)
 Network.AttackEvent.OnServerEvent:Connect(onAttack)
+Network.AbilityEvent.OnServerEvent:Connect(function(player, args)
+	if args == nil then
+		return nil
+	end
+	local key = args
+	onAbility(player, key)
+end)
 return nil

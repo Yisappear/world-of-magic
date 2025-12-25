@@ -9,7 +9,6 @@ local function ArmoreItemButton(props)
 		if button == nil then
 			return nil
 		end
-		print("qq")
 		local connection = button:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
 			Network.UpdateWeaponFrameEvent:Fire(button.AbsoluteSize)
 		end)

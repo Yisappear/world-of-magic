@@ -37,7 +37,8 @@ export default {
     // RemoteEvents
 
         // Weapon
-            AttackEvent: getEvent("Attack", WeaponEvents, "RemoteEvent") as RemoteEvent,            
+            AttackEvent: getEvent("Attack", WeaponEvents, "RemoteEvent") as RemoteEvent, 
+            AbilityEvent: getEvent("Ability", WeaponEvents, "RemoteEvent") as RemoteEvent,           
 
         // Projectile
             RenderEvent: getEvent("Render", ProjectileEvents, "RemoteEvent") as RemoteEvent,
