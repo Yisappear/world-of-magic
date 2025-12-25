@@ -6,9 +6,9 @@ interface WeaponConfig {
     icon: string,
     projectileModel: BasePart | MeshPart,
     projectileSpeed: number,
-    getPath: (player: Player) => BasePart[],
-    moveAtPath: (distanceTraveled: number, nodes: BasePart[]) => [boolean, CFrame],
-    touchedEffect: (otherPart: Instance) => [boolean, EnemyData],
+    rewardMult: number,
+    getPathAttack: (player: Player) => BasePart[],
+    touchedEffectAttack: (otherPart: Instance) => [boolean, EnemyData],
 }
 
 interface ProjectileData {
@@ -21,6 +21,7 @@ interface ProjectileData {
 }
 
 interface EnemyData {
+    character: Model,
     humanoid: Humanoid,
     armore: number,
 }

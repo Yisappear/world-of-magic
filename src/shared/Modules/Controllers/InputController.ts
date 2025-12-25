@@ -1,7 +1,8 @@
 import { ContextActionService } from "@rbxts/services";
 import Network from "shared/Modules/Network";
 
-function onEquip(): void {
+// private functions
+function onEquipWeapon(): void {
 
     let lastClick = 0;
 
@@ -18,11 +19,11 @@ function onEquip(): void {
     ContextActionService.BindAction("Attack", onClick, false, Enum.UserInputType.MouseButton1, Enum.UserInputType.Touch);
 }
 
-function onUnequip(): void {
+function onUnequipWeapon(): void {
     // unbind CAS
     ContextActionService.UnbindAction("Attack");
 }
 
 // setup
-Network.EquipWeaponEvent.OnClientEvent.Connect(onEquip);
-Network.UnequipWeaponEvent.OnClientEvent.Connect(onUnequip);
+Network.WeaponEquipEvent.OnClientEvent.Connect(onEquipWeapon);
+Network.WeaponUnequipEvent.OnClientEvent.Connect(onUnequipWeapon);

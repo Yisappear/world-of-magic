@@ -1,11 +1,14 @@
 import GameConfig from "shared/Modules/Configs/GameConfig";
 import Network from "shared/Modules/Network";
 
-function setSettings(player: Player, profile: ProfileStore.Profile< typeof GameConfig.DATA_TEMPLATE >) {
+type profile = ProfileStore.Profile< typeof GameConfig.DATA_TEMPLATE >
+
+
+function setSettings(player: Player, profile: profile) {
 
 }
 
-function setProfileData(player: Player, profile: ProfileStore.Profile< typeof GameConfig.DATA_TEMPLATE >) {
+function setData(player: Player, profile: profile) {
     if ( profile === undefined ) return;
 
     // leaderstats
@@ -14,13 +17,10 @@ function setProfileData(player: Player, profile: ProfileStore.Profile< typeof Ga
     Cash.Value = profile.Data.cash;
 
     // inventory ui
-    profile.Data.inventory.forEach( (item, key) => {
-        item.equipped = false;
-        Network.GiveItemEvent.Fire(player, item);
-    } )
+    Network.LoadInventoryEvent.Fire(player)
 }
 
-function createSetup(player: Player) {
+function create(player: Player) {
 
     // leaderstats
     const leaderstats = new Instance("Folder");
@@ -35,35 +35,32 @@ function createSetup(player: Player) {
 
 }
 
-function setDataDEBUG(player: Player) {
+function DEBUG(player: Player) {
 
-    // add item
     const weapon: Item = {
         name: "FireStaff",
         itemType: "Weapon",
         equipped: false,
-    }
+    };
     const armore: Item = {
         name: "FireStaff",
         itemType: "Armore",
         armoreType: "Hat",
         equipped: false,
-    }
-    Network.GiveItemEvent.Fire(player, weapon)
-    Network.GiveItemEvent.Fire(player, weapon)
-    Network.GiveItemEvent.Fire(player, armore)
-    Network.GiveItemEvent.Fire(player, armore)
-    Network.GiveItemEvent.Fire(player, armore)
+    };
+    Network.GiveItemToPlayerEvent.Fire(player, weapon);
+    Network.GiveItemToPlayerEvent.Fire(player, weapon);
+    Network.GiveItemToPlayerEvent.Fire(player, armore);
 
 }
 
 // setup
-export function loadData(player: Player, profile: ProfileStore.Profile< typeof GameConfig.DATA_TEMPLATE >) {
+export function loadData(player: Player, profile: profile) {
     if ( profile === undefined ) return;
 
-    createSetup(player);
-    setProfileData(player, profile);
+    create(player);
+    setData(player, profile);
     setSettings(player, profile);
 
-    setDataDEBUG(player);
+    DEBUG(player);
 }

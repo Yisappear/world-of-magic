@@ -10,7 +10,7 @@ local function TextEquipped(props)
 		Visible = true,
 		ClipsDescendants = false,
 		Text = "Equipped",
-		FontFace = Font.new("Ubuntu", Enum.FontWeight.Bold),
+		Font = "Highway",
 		TextColor3 = Color3.fromRGB(255, 255, 255),
 		TextScaled = true,
 	}, React.createElement("uistroke", {

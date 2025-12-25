@@ -3,7 +3,7 @@ local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_incl
 local Network = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Network").default
 local function setSettings(player, profile)
 end
-local function setProfileData(player, profile)
+local function setData(player, profile)
 	if profile == nil then
 		return nil
 	end
@@ -12,18 +12,9 @@ local function setProfileData(player, profile)
 	local Cash = leaderstats:FindFirstChild("Cash")
 	Cash.Value = profile.Data.cash
 	-- inventory ui
-	local _exp = profile.Data.inventory
-	-- ▼ ReadonlyMap.forEach ▼
-	local _callback = function(item, key)
-		item.equipped = false
-		Network.GiveItemEvent:Fire(player, item)
-	end
-	for _k, _v in _exp do
-		_callback(_v, _k, _exp)
-	end
-	-- ▲ ReadonlyMap.forEach ▲
+	Network.LoadInventoryEvent:Fire(player)
 end
-local function createSetup(player)
+local function create(player)
 	-- leaderstats
 	local leaderstats = Instance.new("Folder")
 	leaderstats.Name = "leaderstats"
@@ -33,8 +24,7 @@ local function createSetup(player)
 	leaderstats.Parent = player
 	Cash.Parent = leaderstats
 end
-local function setDataDEBUG(player)
-	-- add item
+local function DEBUG(player)
 	local weapon = {
 		name = "FireStaff",
 		itemType = "Weapon",
@@ -46,21 +36,19 @@ local function setDataDEBUG(player)
 		armoreType = "Hat",
 		equipped = false,
 	}
-	Network.GiveItemEvent:Fire(player, weapon)
-	Network.GiveItemEvent:Fire(player, weapon)
-	Network.GiveItemEvent:Fire(player, armore)
-	Network.GiveItemEvent:Fire(player, armore)
-	Network.GiveItemEvent:Fire(player, armore)
+	Network.GiveItemToPlayerEvent:Fire(player, weapon)
+	Network.GiveItemToPlayerEvent:Fire(player, weapon)
+	Network.GiveItemToPlayerEvent:Fire(player, armore)
 end
 -- setup
 local function loadData(player, profile)
 	if profile == nil then
 		return nil
 	end
-	createSetup(player)
-	setProfileData(player, profile)
+	create(player)
+	setData(player, profile)
 	setSettings(player, profile)
-	setDataDEBUG(player)
+	DEBUG(player)
 end
 return {
 	loadData = loadData,

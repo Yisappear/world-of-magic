@@ -1,4 +1,4 @@
-import { HttpService, ReplicatedStorage } from "@rbxts/services";
+import { ReplicatedStorage } from "@rbxts/services";
 import React from "@rbxts/react";
 import TextInventoryContent from "../Labels/text-inventorycontent";
 import Network from "shared/Modules/Network";
@@ -17,12 +17,12 @@ export default function InventoryFrame(props: Props): React.Element {
     const [weapons, setWeapon] = React.useState<ClientItemData[]>([]);
     React.useEffect(() => {
 
-        const addConnection = Network.AddItemEvent.OnClientEvent.Connect(args => {
+        const addConnection = Network.NewItemEvent.OnClientEvent.Connect(args => {
             const item = args as ClientItemData;
 
             function getIcon(itemType: string, name: string): string {
                 if ( itemType === "Weapon" ) {
-                    const config = require(ReplicatedStorage.FindFirstChild("Modules")?.FindFirstChild("Configs")?.FindFirstChild("Weapons")?.FindFirstChild(name + "Config") as ModuleScript) as WeaponConfig;
+                    const config = require(ReplicatedStorage.FindFirstChild("Modules")?.FindFirstChild("Content")?.FindFirstChild("Weapons")?.FindFirstChild(name) as ModuleScript) as WeaponConfig;
                     const icon = config.icon;
                     return icon;
                 }
@@ -96,7 +96,7 @@ export default function InventoryFrame(props: Props): React.Element {
             >
                 <uigridlayout
                     CellPadding={ new UDim2(0, 5, 0, 5) }
-                    CellSize={ new UDim2(0.15, 0, 1, 0) }
+                    CellSize={ new UDim2(1/5, 0, 1, 0) }
                 >
                     <uiaspectratioconstraint />
                 </uigridlayout>

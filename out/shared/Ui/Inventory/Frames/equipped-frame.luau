@@ -13,14 +13,11 @@ local function EquippedFrame(props)
 			local item = args
 			local function getIcon(itemType, name)
 				if itemType == "Weapon" then
-					local _result = ReplicatedStorage:FindFirstChild("Modules")
+					local _result = ReplicatedStorage:WaitForChild("Modules"):FindFirstChild("Content")
 					if _result ~= nil then
-						_result = _result:FindFirstChild("Configs")
+						_result = _result:FindFirstChild("Weapons")
 						if _result ~= nil then
-							_result = _result:FindFirstChild("Weapons")
-							if _result ~= nil then
-								_result = _result:FindFirstChild(name .. "Config")
-							end
+							_result = _result:FindFirstChild(name)
 						end
 					end
 					local config = require(_result)
@@ -76,7 +73,7 @@ local function EquippedFrame(props)
 	local _exp = React.createElement(TextEquipped)
 	local _exp_1 = React.createElement("uigridlayout", {
 		CellPadding = UDim2.new(0, 5, 0, 5),
-		CellSize = UDim2.new(0.2, 0, 1, 0),
+		CellSize = UDim2.new(1 / 5, 0, 1, 0),
 	}, React.createElement("uiaspectratioconstraint"))
 	-- ▼ ReadonlyArray.map ▼
 	local _newValue = table.create(#items)

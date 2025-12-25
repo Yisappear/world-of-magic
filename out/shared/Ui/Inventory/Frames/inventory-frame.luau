@@ -11,17 +11,17 @@ local function InventoryFrame(props)
 	local armores, setArmore = React.useState({})
 	local weapons, setWeapon = React.useState({})
 	React.useEffect(function()
-		local addConnection = Network.AddItemEvent.OnClientEvent:Connect(function(args)
+		local addConnection = Network.NewItemEvent.OnClientEvent:Connect(function(args)
 			local item = args
 			local function getIcon(itemType, name)
 				if itemType == "Weapon" then
 					local _result = ReplicatedStorage:FindFirstChild("Modules")
 					if _result ~= nil then
-						_result = _result:FindFirstChild("Configs")
+						_result = _result:FindFirstChild("Content")
 						if _result ~= nil then
 							_result = _result:FindFirstChild("Weapons")
 							if _result ~= nil then
-								_result = _result:FindFirstChild(name .. "Config")
+								_result = _result:FindFirstChild(name)
 							end
 						end
 					end
@@ -116,7 +116,7 @@ local function InventoryFrame(props)
 	local _exp = React.createElement(TextInventoryContent)
 	local _exp_1 = React.createElement("uigridlayout", {
 		CellPadding = UDim2.new(0, 5, 0, 5),
-		CellSize = UDim2.new(0.15, 0, 1, 0),
+		CellSize = UDim2.new(1 / 5, 0, 1, 0),
 	}, React.createElement("uiaspectratioconstraint"))
 	-- ▼ ReadonlyArray.map ▼
 	local _newValue = table.create(#weapons)

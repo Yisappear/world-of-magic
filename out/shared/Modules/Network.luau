@@ -15,11 +15,7 @@ local function getEvent(name, folder, eventType)
 		return isEvent
 	end
 	if RunService:IsClient() == true then
-		local _result = folder
-		if _result ~= nil then
-			_result = _result:WaitForChild(name)
-		end
-		local isEvent = _result
+		local isEvent = folder:WaitForChild(name)
 		if isEvent ~= nil then
 			return isEvent
 		end
@@ -28,10 +24,10 @@ local function getEvent(name, folder, eventType)
 	if RunService:IsServer() == true then
 		local isFolder = folder
 		if isFolder == nil then
-			error(`foler for events fot undefined FolderName: {folder.Name}`)
+			error(`foler for events got undefined FolderName: {folder.Name}`)
 		end
 		local event = Instance.new(eventType)
-		event.Parent = isFolder
+		event.Parent = folder
 		event.Name = name
 		return event
 	end
@@ -40,17 +36,19 @@ end
 local default = {
 	AttackEvent = getEvent("Attack", WeaponEvents, "RemoteEvent"),
 	RenderEvent = getEvent("Render", ProjectileEvents, "RemoteEvent"),
-	AddItemEvent = getEvent("AddItem", InventoryEvents, "RemoteEvent"),
-	GiveItemEvent = getEvent("GiveItem", InventoryEvents, "BindableEvent"),
+	LoadInventoryEvent = getEvent("LoadInventory", InventoryEvents, "BindableEvent"),
+	GiveItemToPlayerEvent = getEvent("GiveItemToPlayer", InventoryEvents, "BindableEvent"),
+	NewItemEvent = getEvent("NewItem", InventoryEvents, "RemoteEvent"),
 	DelItemEvent = getEvent("DelItem", InventoryEvents, "RemoteEvent"),
 	EquipItemEvent = getEvent("EquipItem", InventoryEvents, "RemoteEvent"),
 	UnequipItemEvent = getEvent("UnequipItem", InventoryEvents, "RemoteEvent"),
-	SelectItemEvent = getEvent("SelectItem", InventoryEvents, "BindableEvent"),
 	IsEquipped = getEvent("IsEquipped", InventoryEvents, "RemoteFunction"),
+	SelectItemEvent = getEvent("SelectItem", InventoryEvents, "BindableEvent"),
 	CloseInventoryEvent = getEvent("CloseInventory", InventoryEvents, "BindableEvent"),
-	EquipWeaponEvent = getEvent("EquipWeapon", InventoryEvents, "RemoteEvent"),
-	UnequipWeaponEvent = getEvent("UnequipWeapon", InventoryEvents, "RemoteEvent"),
-	EquipArmoreEvent = getEvent("EquipArmore", InventoryEvents, "RemoteEvent"),
+	UpdateWeaponFrameEvent = getEvent("UpdateWeaponFrame", InventoryEvents, "BindableEvent"),
+	WeaponEquipEvent = getEvent("WeaponEquip", InventoryEvents, "RemoteEvent"),
+	WeaponUnequipEvent = getEvent("WeaponUnequip", InventoryEvents, "RemoteEvent"),
+	ArmoreEquipEvent = getEvent("ArmoreEquip", InventoryEvents, "RemoteEvent"),
 }
 return {
 	default = default,

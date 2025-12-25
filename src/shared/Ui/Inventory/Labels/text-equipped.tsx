@@ -15,7 +15,7 @@ export default function TextEquipped(props: Props): React.Element {
             ClipsDescendants={ false }
 
             Text={ "Equipped" }
-            FontFace={ new Font("Ubuntu", Enum.FontWeight.Bold) }
+            Font={ "Highway" }
             TextColor3={ Color3.fromRGB(255, 255, 255) }
             TextScaled={ true }
         >

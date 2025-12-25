@@ -4,7 +4,9 @@ local ClientConfig = TS.import(script, game:GetService("ReplicatedStorage"), "Mo
 local React = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "react")
 local ReactRoblox = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "react-roblox")
 local InventoryComponent = TS.import(script, game:GetService("ReplicatedStorage"), "Ui", "Inventory").default
+-- UI's
 local inventory = React.createElement(InventoryComponent, {})
+-- setup
 local root = ReactRoblox.createRoot(ClientConfig.PLAYER_GUI)
 root:render(inventory)
 return nil

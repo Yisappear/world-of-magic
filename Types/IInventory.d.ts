@@ -1,13 +1,14 @@
+
+type ItemType = "Weapon" | "Armore" 
+
 interface Item {
     name: string,
-    itemType: "Weapon" | "Armore",
+    itemType: ItemType,
     armoreType?: "Hat" | "Torse" | "Legs",
     equipped: boolean,
 }
 
-type ItemType = "Weapon" | "Armore" 
-
-interface ItemData {
+interface ItemData { //  ->  type ItemKey = string // for find or get from inventory
     uuid: string,
     name: string,
     itemType: ItemType,

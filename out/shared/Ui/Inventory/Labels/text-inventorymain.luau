@@ -10,7 +10,7 @@ local function TextInventoryMain(props)
 		Visible = true,
 		ClipsDescendants = false,
 		Text = "INVENTORY",
-		FontFace = Font.new("Ubuntu", Enum.FontWeight.Bold),
+		Font = "Highway",
 		TextColor3 = Color3.fromRGB(245, 245, 245),
 		TextScaled = true,
 	}, React.createElement("uistroke", {

@@ -9,11 +9,11 @@ const ProjectileEvents = Events.FindFirstChild("ProjectilesEvents") as Folder;
 // private functions
 function getEvent(name: string, folder: Folder, eventType: "RemoteEvent" | "RemoteFunction" | "BindableEvent" | "BindableFunction") {
 
-    const isEvent = folder.FindFirstChild(name) as RemoteEvent | RemoteFunction;
+    const isEvent = folder.FindFirstChild(name);
     if ( isEvent !== undefined) return isEvent;
 
     if ( RunService.IsClient() === true ) {
-        const isEvent = folder?.WaitForChild(name) as RemoteEvent | RemoteFunction;
+        const isEvent = folder.WaitForChild(name) as RemoteEvent | RemoteFunction;
         if ( isEvent !== undefined) return isEvent;
 
         throw`client event got null: ${name}, ${folder}, ${eventType}`
@@ -21,10 +21,10 @@ function getEvent(name: string, folder: Folder, eventType: "RemoteEvent" | "Remo
 
     if ( RunService.IsServer() === true ) {
         const isFolder = folder as Folder;
-        if ( isFolder === undefined ) throw`foler for events fot undefined FolderName: ${folder.Name}`
+        if ( isFolder === undefined ) throw`foler for events got undefined FolderName: ${folder.Name}`
     
         const event = new Instance(eventType);
-        event.Parent = isFolder;
+        event.Parent = folder;
         event.Name = name;
     
         return event;
@@ -44,20 +44,22 @@ export default {
 
 
         // Inventory
-            AddItemEvent: getEvent("AddItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
-            GiveItemEvent: getEvent("GiveItem", InventoryEvents, "BindableEvent") as BindableEvent,
+            LoadInventoryEvent: getEvent("LoadInventory", InventoryEvents, "BindableEvent") as BindableEvent,
+            GiveItemToPlayerEvent: getEvent("GiveItemToPlayer", InventoryEvents, "BindableEvent") as BindableEvent,
+            NewItemEvent: getEvent("NewItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
             DelItemEvent: getEvent("DelItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
             EquipItemEvent: getEvent("EquipItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
             UnequipItemEvent: getEvent("UnequipItem", InventoryEvents, "RemoteEvent") as RemoteEvent,
-            SelectItemEvent: getEvent("SelectItem", InventoryEvents, "BindableEvent") as BindableEvent,
             IsEquipped: getEvent("IsEquipped", InventoryEvents, "RemoteFunction") as RemoteFunction,
+            SelectItemEvent: getEvent("SelectItem", InventoryEvents, "BindableEvent") as BindableEvent,
             CloseInventoryEvent: getEvent("CloseInventory", InventoryEvents, "BindableEvent") as BindableEvent,
+            UpdateWeaponFrameEvent: getEvent("UpdateWeaponFrame", InventoryEvents, "BindableEvent") as BindableEvent,
 
             // Weapon
-                EquipWeaponEvent: getEvent("EquipWeapon", InventoryEvents, "RemoteEvent") as RemoteEvent,
-                UnequipWeaponEvent: getEvent("UnequipWeapon", InventoryEvents, "RemoteEvent") as RemoteEvent,
+                WeaponEquipEvent: getEvent("WeaponEquip", InventoryEvents, "RemoteEvent") as RemoteEvent,
+                WeaponUnequipEvent: getEvent("WeaponUnequip", InventoryEvents, "RemoteEvent") as RemoteEvent,
             // Armore
-                EquipArmoreEvent: getEvent("EquipArmore", InventoryEvents, "RemoteEvent") as RemoteEvent,
+                ArmoreEquipEvent: getEvent("ArmoreEquip", InventoryEvents, "RemoteEvent") as RemoteEvent,
 
     // RemoteFunctions
 

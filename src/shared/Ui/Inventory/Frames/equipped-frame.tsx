@@ -20,7 +20,7 @@ export default function EquippedFrame(props: Props): React.Element {
 
            function getIcon(itemType: string, name: string): string {
                 if ( itemType === "Weapon" ) {
-                    const config = require(ReplicatedStorage.FindFirstChild("Modules")?.FindFirstChild("Configs")?.FindFirstChild("Weapons")?.FindFirstChild(name + "Config") as ModuleScript) as WeaponConfig;
+                    const config = require(ReplicatedStorage.WaitForChild("Modules").FindFirstChild("Content")?.FindFirstChild("Weapons")?.FindFirstChild(name) as ModuleScript) as WeaponConfig;
                     const icon = config.icon;
                     return icon;
                 }
@@ -77,7 +77,7 @@ export default function EquippedFrame(props: Props): React.Element {
             >
                 <uigridlayout
                     CellPadding={ new UDim2(0, 5, 0, 5) }
-                    CellSize={ new UDim2(0.2, 0, 1, 0) }
+                    CellSize={ new UDim2(1/5, 0, 1, 0) }
                 >
                     <uiaspectratioconstraint />
                 </uigridlayout>

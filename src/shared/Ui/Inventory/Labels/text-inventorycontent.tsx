@@ -15,7 +15,7 @@ export default function TextInventoryContent(props: Props): React.Element {
             ClipsDescendants={ false }
 
             Text={ "Inventory" }
-            FontFace={ new Font("Ubuntu", Enum.FontWeight.Bold) }
+            Font={ "Highway" }
             TextColor3={ Color3.fromRGB(255, 255, 255) }
             TextScaled={ true }
         >

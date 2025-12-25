@@ -15,7 +15,7 @@ export default function TextVoidSelect(props: Props): React.Element {
             ClipsDescendants={ false }
 
             Text={ "Select any item" }
-            FontFace={ new Font("Ubuntu", Enum.FontWeight.Bold) }
+            Font={ "Highway" }
             TextColor3={ Color3.fromRGB(0, 0, 0) }
             TextScaled={ true }
         >
