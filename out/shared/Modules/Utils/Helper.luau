@@ -1,24 +1,39 @@
 -- Compiled with roblox-ts v3.0.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local Workspace = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").Workspace
+-- types
+-- export
 local function getCharacterFromPlayer(player)
-	if player == nil then
-		error("why u call this function without player parametr")
-	end
 	return player.Character or (player.CharacterAdded:Wait())
 end
+local function getCharacterDirectionVectors(player)
+	local character = getCharacterFromPlayer(player)
+	local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+	local hrpCFrame = humanoidRootPart.CFrame
+	local hrpPosition = hrpCFrame.Position
+	local lookVector = hrpCFrame.LookVector
+	local upVector = hrpCFrame.UpVector
+	local rightVector = hrpCFrame.RightVector
+	return {
+		positionVector = hrpPosition,
+		lookVector = lookVector,
+		upVector = upVector,
+		rightVector = rightVector,
+	}
+end
 local function createNode(pos)
-	local node = Instance.new("Part")
-	node.Parent = Workspace
-	node.Size = Vector3.new(1, 1, 1)
-	node.Position = pos
-	node.Transparency = 0.5
-	node.CanCollide = false
-	node.CanTouch = false
-	node.Anchored = true
-	return node
+	local part = Instance.new("Part")
+	part.Parent = Workspace
+	part.Size = Vector3.one
+	part.Position = pos
+	part.Transparency = 0.5
+	part.Anchored = true
+	part.CanCollide = false
+	part.CanTouch = false
+	return part
 end
 return {
 	getCharacterFromPlayer = getCharacterFromPlayer,
+	getCharacterDirectionVectors = getCharacterDirectionVectors,
 	createNode = createNode,
 }

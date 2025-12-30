@@ -4,7 +4,7 @@ local _services = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts
 local Players = _services.Players
 local RunService = _services.RunService
 if RunService:IsClient() == false then
-	error("don't client??")
+	error("> ClientConfig required from server")
 end
 local player = Players.LocalPlayer
 local default = {

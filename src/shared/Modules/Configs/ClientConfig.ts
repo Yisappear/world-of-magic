@@ -1,5 +1,5 @@
 import { Players, RunService } from "@rbxts/services";
-if ( RunService.IsClient() === false ) throw"don't client??";
+if ( RunService.IsClient() === false ) throw"> ClientConfig required from server";
 
 const player = Players.LocalPlayer;
 

@@ -2,13 +2,21 @@
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local Players = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").Players
 local ProfileStore = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "profile-store", "src")
-local GameConfig = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Configs", "GameConfig").default
-local loadData = TS.import(script, game:GetService("ServerStorage"), "Modules", "Utils", "DataHelper").loadData
 -- constants
-local PlayerStore = ProfileStore.New(GameConfig.DATA_NAME, GameConfig.DATA_TEMPLATE)
+local DATA_NAME = "unknown"
+local DATA_TEMPLATE = {
+	cash = 333,
+	max_items = 7,
+	inventory = {
+		equipped = {},
+		unequipped = {},
+	},
+	settings = {},
+}
+local PlayerStore = ProfileStore.New(DATA_NAME, DATA_TEMPLATE)
 local Profiles = {}
 -- private functions
-local function onPlayerAdded(player)
+local function loadData(player)
 	-- start session?
 	local key = `User_` .. tostring(player.UserId)
 	local profile = PlayerStore:StartSessionAsync(key, {
@@ -33,9 +41,9 @@ local function onPlayerAdded(player)
 	else
 		player:Kick(`Profile load fail - Please rejoin`)
 	end
-	loadData(player, profile)
-	-- DEBUG
-	-- profile.Data.inventory = new Map();
+end
+local function onPlayerAdded(player)
+	loadData(player)
 end
 -- export
 local function getProfile(player)
