@@ -11,7 +11,6 @@ type Projectile = {
 }
 
 // private variables
-// setup array for moving parts
 const projectiles: Projectile[] = [];
 
 // private functions
@@ -35,6 +34,13 @@ function getPositionAtPath(treveledDistance: number, nodes: BasePart[]): [boolea
     return [true, CFrame.lookAlong(p1, p1.sub(p0))];
 }
 
+function damageToEnemy(humanoid: Humanoid, damage: number) {
+
+    const hlth = humanoid.Health - damage; // todo: rename
+    const newHealth = math.max(hlth, 0);
+    humanoid.Health = newHealth;
+}
+
 function onAttack(player: Player): void {
 
     const t = Workspace.GetServerTimeNow();
@@ -54,16 +60,6 @@ function onAttack(player: Player): void {
         nodes: nodes,
     });
 
-    function damageToEnemy(humanoid: Humanoid) {
-
-        const hlth = humanoid.Health - damage; // todo: rename
-        const newHealth = math.max(hlth, 0);
-
-        print(newHealth)
-
-        humanoid.Health = newHealth;
-    }
-
     let hasTouched = false;
     const connection = model.Touched.Connect(otherPart => {
         if ( hasTouched ) return;
@@ -78,7 +74,7 @@ function onAttack(player: Player): void {
         const enemyCharacter = otherPart.Parent as Model;
         const enemyHumanoid = enemyCharacter.FindFirstChild("Humanoid") as Humanoid;
         if ( enemyCharacter && enemyHumanoid ) {
-            damageToEnemy(enemyHumanoid);
+            damageToEnemy(enemyHumanoid, damage);
         }
 
         connection.Disconnect();
@@ -86,22 +82,67 @@ function onAttack(player: Player): void {
     });
 }
 
-function onAbility(player: Player, keycode: "Z" | "X"): void {
+function onAbility(player: Player, keyword: "first" | "second"): void {
 
+    const t = Workspace.GetServerTimeNow();
 
-    // TODO: how to release
+    let hasNodes: boolean = false;
+    let nodes!: BasePart[];
+    let touchedFunction!: TouchedFunction;
+    if ( keyword === "first" ) {
+        const [has, list, func] = BasicStaff.firstAbility(player);
+        hasNodes = has as boolean;
+        nodes = list as BasePart[];
+        touchedFunction = func as TouchedFunction;
+    }
+    if ( keyword === "second" ) {
+        const [has, list, func] = BasicStaff.secondAbility(player);
+        hasNodes = has as boolean;
+        nodes = list as BasePart[];
+        touchedFunction = func as TouchedFunction;
+    }
+    if ( !hasNodes ) return;
 
+    // debug get basic
+    const damage = BasicStaff.firstAbilityDamage;
+    const speed = BasicStaff.firstAbilitySpeed;
+    const model = BasicStaff.firstAbilityProjectileModel.Clone();
+    model.Parent = Workspace; model.Color = Color3.fromRGB(220, 0, 0); 
 
+    // create object for movement
+    projectiles.push({
+        createTime: t,
+        speed: speed,
+        model: model,
+        nodes: nodes,
+    });
 
+    let hasTouched = false;
+    const connection = model.Touched.Connect(otherPart => {
+        if ( hasTouched ) return;
 
-    const isMoving = BasicStaff.getNodesAbilityZ(player);
+        hasTouched = true;
+
+        // cleanup
+        const idx = projectiles.findIndex(v => v.createTime === t);
+        projectiles.remove(idx);
+        model.Destroy();
+
+        const [isTouchEnemy, enemyHumanoid] = touchedFunction(otherPart);
+        if ( isTouchEnemy && enemyHumanoid ) {
+            damageToEnemy(enemyHumanoid, damage);
+        }
+        
+        connection.Disconnect();
+        return;
+    });
 
 }
 
 // setup
 RunService.Stepped.Connect(() => {
 
-    const t = Workspace.GetServerTimeNow()
+    const t = Workspace.GetServerTimeNow();
 
     const parts: BasePart[] = [];
     const cfs: CFrame[] = [];
@@ -135,4 +176,8 @@ RunService.Stepped.Connect(() => {
 
 // network
 Network.Attack.OnServerEvent.Connect(onAttack)
-// Network.Ability.OnServerEvent.Connect((player, args) => { onAbility(player, args) });
+Network.Ability.OnServerEvent.Connect((player, args) => { 
+    if ( !args ) return;
+    const data = args as "first" | "second";
+    onAbility(player, data);
+});

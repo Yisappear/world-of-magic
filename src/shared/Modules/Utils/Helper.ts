@@ -44,3 +44,17 @@ export function createNode(pos: Vector3): BasePart {
 
     return part;
 }
+
+export function createLeaderstatsForPlayer(player: Player): void {
+
+    const leaderstats = new Instance("Folder") as Folder;
+    leaderstats.Name = "leaderstats";
+
+    const cash = new Instance("NumberValue") as NumberValue;
+    cash.Name = "Cash";
+    cash.Value = 0;
+
+    leaderstats.Parent = player;
+    cash.Parent = leaderstats;
+    
+}
