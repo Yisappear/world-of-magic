@@ -1,21 +1,21 @@
 import { Players } from "@rbxts/services";
 import GameConfig from "shared/Modules/Configs/GameConfig";
-import { newProfile, removeProfile } from "shared/Modules/PlayerData";
+import { getNewProfile, removeProfile } from "shared/Modules/PlayerData";
 import { createLeaderstatsForPlayer } from "shared/Modules/Utils/Helper";
 
 // types
 interface PlayerStruct {
     player: Player,
-    data: ProfileStore.Profile<typeof GameConfig.dataTemplate>,
+    data: typeof GameConfig.dataTemplate,
     
 }
 
-// main array
+// module logic
 const players: PlayerStruct[] = [];
 
 // private functions
 function newPlayer(player: Player) {
-    const data = newProfile(player);
+    const data = getNewProfile(player);
     if ( data === undefined ) {
         player.Kick("Profile error, please rejoin.");
         return;

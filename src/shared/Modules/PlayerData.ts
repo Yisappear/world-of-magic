@@ -1,15 +1,39 @@
 import { Players } from "@rbxts/services";
 import ProfileStore from "@rbxts/profile-store";
 import GameConfig from "./Configs/GameConfig";
+import { createLeaderstatsForPlayer } from "./Utils/Helper";
 
-// constants
+// module logic constants
 const PlayerStore = ProfileStore.New(GameConfig.dataName, GameConfig.dataTemplate);
 const Profiles = new Map<number, ProfileStore.Profile<typeof GameConfig.dataTemplate>>();
 
 // private functions
-function loadData(player: Player) {
+function dataOnChange(player: Player): void {
+    const profile = Profiles.get(player.UserId);
+    if ( !profile ) {
+        player.Kick("Profile don't finded, please rejoin.");
+        return;
+    }
+    // constants
+    const leaderstats = player.FindFirstChild("leaderstats") as Folder;
+    const cash = leaderstats.FindFirstChild("Cash") as NumberValue;
 
-    // start session?
+    // setup data
+    cash.Value = profile.Data.cash;
+
+    // remote for change data
+
+
+}
+
+function createData(player: Player): void {
+
+    createLeaderstatsForPlayer(player);
+    dataOnChange(player);
+
+}
+
+function loadData(player: Player) {
     const key = `User_` + player.UserId;
     const profile = PlayerStore.StartSessionAsync(key, {
         Cancel: (() => {
@@ -35,12 +59,18 @@ function loadData(player: Player) {
     } else {
         player.Kick(`Profile load fail - Please rejoin`);
     }
+
+    createData(player);
 }
 
 // export
-export function newProfile(player: Player): ProfileStore.Profile< typeof GameConfig.dataTemplate > | undefined {
+export function getNewProfile(player: Player): typeof GameConfig.dataTemplate | undefined {
     loadData(player);
-    return Profiles.get(player.UserId);
+    return Profiles.get(player.UserId)?.Data;
+}
+
+export function getProfile(player: Player): typeof GameConfig.dataTemplate | undefined {
+    return Profiles.get(player.UserId)?.Data;
 }
 
 export function removeProfile(player: Player): void {

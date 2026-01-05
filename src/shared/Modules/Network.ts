@@ -6,6 +6,7 @@ type Ievent = RemoteEvent | RemoteFunction | BindableEvent | BindableFunction;
 
 // folders
 const Events = ReplicatedStorage.WaitForChild("Events") as Folder;
+const RoundEvents = Events.FindFirstChild("RoundEvents") as Folder;
 const WeaponEvents = Events.FindFirstChild("WeaponEvents") as Folder;
 
 // private functions
@@ -26,11 +27,12 @@ function getEvent(eventName: string, folder: Folder, eventType: event): Ievent {
 
 export default {
 
-
+    // Round
+        JoinToGameEvent: getEvent("JoinToGame", RoundEvents, "RemoteEvent") as RemoteEvent,
 
     // WeaponEvents folder
-    Attack: getEvent("Attack", WeaponEvents, "RemoteEvent") as RemoteEvent,
-    Ability: getEvent("Ability", WeaponEvents, "RemoteEvent") as RemoteEvent,
+        Attack: getEvent("Attack", WeaponEvents, "RemoteEvent") as RemoteEvent,
+        Ability: getEvent("Ability", WeaponEvents, "RemoteEvent") as RemoteEvent,
 
 
 }

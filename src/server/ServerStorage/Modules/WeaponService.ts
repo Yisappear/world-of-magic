@@ -1,6 +1,8 @@
-import { Workspace, RunService } from "@rbxts/services";
+import { Workspace, RunService, ReplicatedStorage } from "@rbxts/services";
 import Network from "shared/Modules/Network";
 import BasicStaff from "shared/Modules/Content/Weapons/BasicStaff";
+import { getPlayerStruct } from "./Player";
+import { getCharacterFromPlayer } from "shared/Modules/Utils/Helper";
 
 // types
 type Projectile = {
@@ -10,7 +12,7 @@ type Projectile = {
     nodes: BasePart[],
 }
 
-// private variables
+// module logic
 const projectiles: Projectile[] = [];
 
 // private functions
@@ -41,11 +43,39 @@ function damageToEnemy(humanoid: Humanoid, damage: number) {
     humanoid.Health = newHealth;
 }
 
+function getWeaponConfig(player: Player): weapon | undefined | string {
+    const playerStruct = getPlayerStruct(player);
+    if ( !playerStruct ) {
+        player.Kick("Game end. :P");
+        return undefined;
+    }
+
+    const inventory = playerStruct.data.inventory as Inventory;
+    const equipped = inventory.equipped;
+    
+    let weaponName = ""
+    for (const i of equipped) {
+        if ( i.itemType === "Weapon") {
+            weaponName =  i.itemName;
+        }
+    }
+
+    const module = require(ReplicatedStorage
+        .FindFirstChild("Modules")
+        ?.FindFirstChild("Contens")
+        ?.FindFirstChild("Weapons")
+        ?.FindFirstChild(weaponName) as ModuleScript) as { default: weapon};
+    if ( !module ) throw` ${weaponName}, config doesn't exist `;
+
+    const config = module.default;
+    return config;
+}
+
 function onAttack(player: Player): void {
 
     const t = Workspace.GetServerTimeNow();
 
-    // debug get basic
+    // debug get basic config
     const damage = BasicStaff.damage;
     const speed = BasicStaff.speed;
     const model = BasicStaff.projectileModel.Clone();
@@ -60,9 +90,12 @@ function onAttack(player: Player): void {
         nodes: nodes,
     });
 
+    const ownerCharacter = getCharacterFromPlayer(player);
+
     let hasTouched = false;
     const connection = model.Touched.Connect(otherPart => {
         if ( hasTouched ) return;
+        if ( otherPart.Parent === ownerCharacter ) return;
 
         hasTouched = true;
 
@@ -86,6 +119,9 @@ function onAbility(player: Player, keyword: "first" | "second"): void {
 
     const t = Workspace.GetServerTimeNow();
 
+    // get config from profile data equipped items
+
+
     let hasNodes: boolean = false;
     let nodes!: BasePart[];
     let touchedFunction!: TouchedFunction;
@@ -103,13 +139,13 @@ function onAbility(player: Player, keyword: "first" | "second"): void {
     }
     if ( !hasNodes ) return;
 
-    // debug get basic
+    // debug get basic config
     const damage = BasicStaff.firstAbilityDamage;
     const speed = BasicStaff.firstAbilitySpeed;
     const model = BasicStaff.firstAbilityProjectileModel.Clone();
     model.Parent = Workspace; model.Color = Color3.fromRGB(220, 0, 0); 
 
-    // create object for movement
+    // object for movement
     projectiles.push({
         createTime: t,
         speed: speed,
@@ -117,9 +153,12 @@ function onAbility(player: Player, keyword: "first" | "second"): void {
         nodes: nodes,
     });
 
+    const ownerCharacter = getCharacterFromPlayer(player);
+
     let hasTouched = false;
     const connection = model.Touched.Connect(otherPart => {
         if ( hasTouched ) return;
+        if ( otherPart.Parent === ownerCharacter ) return;
 
         hasTouched = true;
 

@@ -1,66 +1,57 @@
 -- Compiled with roblox-ts v3.0.0
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local Players = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "services").Players
-local ProfileStore = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "profile-store", "src")
--- constants
-local DATA_NAME = "unknown"
-local DATA_TEMPLATE = {
-	cash = 333,
-	max_items = 7,
-	inventory = {
-		equipped = {},
-		unequipped = {},
-	},
-	settings = {},
-}
-local PlayerStore = ProfileStore.New(DATA_NAME, DATA_TEMPLATE)
-local Profiles = {}
+local _PlayerData = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "PlayerData")
+local getNewProfile = _PlayerData.getNewProfile
+local removeProfile = _PlayerData.removeProfile
+local createLeaderstatsForPlayer = TS.import(script, game:GetService("ReplicatedStorage"), "Modules", "Utils", "Helper").createLeaderstatsForPlayer
+-- types
+-- module logic
+local players = {}
 -- private functions
-local function loadData(player)
-	-- start session?
-	local key = `User_` .. tostring(player.UserId)
-	local profile = PlayerStore:StartSessionAsync(key, {
-		Cancel = (function()
-			return player.Parent ~= Players
-		end),
-	})
-	if profile ~= nil then
-		profile:AddUserId(player.UserId)
-		profile:Reconcile()
-		profile.OnSessionEnd:Connect(function()
-			local _userId = player.UserId
-			Profiles[_userId] = nil
-			player:Kick(`Profile session end - Please rejoin`)
-		end)
-		if player.Parent == Players then
-			local _userId = player.UserId
-			Profiles[_userId] = profile
-		else
-			profile:EndSession()
-		end
-	else
-		player:Kick(`Profile load fail - Please rejoin`)
+local function newPlayer(player)
+	local data = getNewProfile(player)
+	if data == nil then
+		player:Kick("Profile error, please rejoin.")
+		return nil
 	end
+	createLeaderstatsForPlayer(player)
+	local _arg0 = {
+		player = player,
+		data = data,
+	}
+	table.insert(players, _arg0)
 end
-local function onPlayerAdded(player)
-	loadData(player)
+local function removePlayer(player)
+	removeProfile(player)
+	-- ▼ ReadonlyArray.findIndex ▼
+	local _callback = function(v)
+		return v.player == player
+	end
+	local _result = -1
+	for _i, _v in players do
+		if _callback(_v, _i - 1, players) == true then
+			_result = _i - 1
+			break
+		end
+	end
+	-- ▲ ReadonlyArray.findIndex ▲
+	local idx = _result
+	table.remove(players, idx + 1)
 end
 -- export
-local function getProfile(player)
-	local _userId = player.UserId
-	return Profiles[_userId]
+local function getPlayerStruct(player)
+	for _, i in players do
+		if i.player == player then
+			return i
+		end
+	end
+	player:Kick("PlayerStruct don't exist.")
+	return nil
 end
 -- setup
-Players.PlayerAdded:Connect(function(player)
-	return onPlayerAdded(player)
-end)
-Players.PlayerRemoving:Connect(function(player, reason)
-	local _userId = player.UserId
-	local profile = Profiles[_userId]
-	if profile ~= nil then
-		profile:EndSession()
-	end
-end)
+Players.PlayerAdded:Connect(newPlayer)
+Players.PlayerRemoving:Connect(removePlayer)
 return {
-	default = getProfile,
+	getPlayerStruct = getPlayerStruct,
 }

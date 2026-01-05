@@ -32,8 +32,18 @@ local function createNode(pos)
 	part.CanTouch = false
 	return part
 end
+local function createLeaderstatsForPlayer(player)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"
+	local cash = Instance.new("NumberValue")
+	cash.Name = "Cash"
+	cash.Value = 0
+	leaderstats.Parent = player
+	cash.Parent = leaderstats
+end
 return {
 	getCharacterFromPlayer = getCharacterFromPlayer,
 	getCharacterDirectionVectors = getCharacterDirectionVectors,
 	createNode = createNode,
+	createLeaderstatsForPlayer = createLeaderstatsForPlayer,
 }

@@ -3,8 +3,8 @@ import { RunService } from "@rbxts/services";
 export default {
 
     isServer: RunService.IsServer(),
-    isStudio: RunService.IsStudio(),
     isClient: RunService.IsClient(),
+    isStudio: RunService.IsStudio(),
 
     // data
     dataName: "unknown",
@@ -12,10 +12,13 @@ export default {
         cash: 333,
         max_items: 7,
         inventory: {
-            equipped: [],
-            unequipped: [],
+            equipped: [
+                { uuid: ":P", itemType: ":P", itemName: ":P", equipped: false }
+            ],
+            unequipped: [
+                { uuid: "", itemType: "", itemName: "", equipped: false }
+            ],
         },
-        settings: new Map(),
     },
 
 

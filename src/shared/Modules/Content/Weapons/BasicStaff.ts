@@ -17,7 +17,7 @@ export default {
     // attack
     projectileModel: fireball,
     damage: 20,
-    speed: 4,
+    speed: 14,
 
     // first ability
     firstAbilityProjectileModel: meteorite,
@@ -56,7 +56,7 @@ export default {
             return [false, undefined];
         }
 
-        return [false, nodes, touchEffect];
+        return [true, nodes, touchEffect];
     },
 
     secondAbility(player: Player): Ability {

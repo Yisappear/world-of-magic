@@ -8,7 +8,11 @@ world-of-magic
     - promise
     - threads (task.spawn, coroutine)
 
-    
-    i'm yeat !!!!
+
+    todo:
+        round structure, how will to work that,
+
+
+
 
 */
